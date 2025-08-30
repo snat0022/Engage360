@@ -1,218 +1,255 @@
 <template>
-  <div class="faq container py-4">
-    <header class="mb-4">
-      <h1 class="mb-2">Frequently Asked Questions</h1>
-      <p class="text-muted">Search or filter by category. Click a question to expand.</p>
+  <div class="faq-view py-4 py-md-5">
+    <div class="container">
+      <!-- Header -->
+      <div class="text-center mb-4 mb-md-5">
+        <h1 class="fw-bold mb-2">Frequently Asked Questions</h1>
+        <p class="lead text-muted mx-auto" style="max-width: 48rem;">
+          Everything you need to know about joining our community sports programs.
+          Can't find what you're looking for? We're here to help!
+        </p>
+      </div>
 
-      <div class="row g-2 align-items-center">
-        <div class="col-12 col-md-6">
-          <input
-            v-model.trim="q"
-            type="search"
-            class="form-control"
-            placeholder="Search FAQs…"
-            aria-label="Search FAQs"
-          />
-        </div>
+      <!-- FAQ Accordion -->
+      <div class="card shadow-card mb-5">
+        <div class="card-body p-4 p-md-5">
+          <h2 class="h4 fw-bold mb-1">Common Questions</h2>
+          <p class="text-muted mb-4">
+            Get answers to the most frequently asked questions about our programs and services.
+          </p>
 
-        <div class="col-8 col-md-3">
-          <select v-model="category" class="form-select" aria-label="Filter by category">
-            <option value="">All categories</option>
-            <option v-for="c in categories" :key="c" :value="c">{{ c }}</option>
-          </select>
-        </div>
+          <div class="accordion-vue">
+            <article
+              v-for="(faq, i) in faqs"
+              :key="i"
+              class="faq-item"
+            >
+              <button
+                type="button"
+                class="faq-trigger"
+                :aria-expanded="openIndex === i ? 'true' : 'false'"
+                :aria-controls="'ans-' + i"
+                :id="'q-' + i"
+                @click="toggle(i)"
+              >
+                <span class="text">{{ faq.question }}</span>
+                <span class="chev" :class="{ open: openIndex === i }" aria-hidden="true">▾</span>
+              </button>
 
-        <div class="col-4 col-md-3 d-flex gap-2 justify-content-end">
-          <button class="btn btn-outline-secondary btn-sm" @click="collapseAll">Collapse</button>
-          <button class="btn btn-primary btn-sm" @click="expandAll">Expand</button>
+              <div
+                :id="'ans-' + i"
+                class="faq-panel"
+                role="region"
+                :aria-labelledby="'q-' + i"
+                :class="{ open: openIndex === i }"
+              >
+                <p class="mb-0 text-muted">{{ faq.answer }}</p>
+              </div>
+            </article>
+          </div>
         </div>
       </div>
-    </header>
 
-    <section v-if="filtered.length">
-      <article v-for="(item, i) in filtered" :key="item.id" class="faq-item">
-        <button
-          type="button"
-          class="faq-q"
-          :aria-expanded="item.open ? 'true' : 'false'"
-          :aria-controls="'ans-' + item.id"
-          :id="'q-' + item.id"
-          @click="toggle(i)"
-        >
-          <span class="q-text">{{ item.question }}</span>
-          <span class="chev" :class="{ open: item.open }" aria-hidden="true">▾</span>
-        </button>
-
-        <div
-          :id="'ans-' + item.id"
-          class="faq-a-wrapper"
-          role="region"
-          :aria-labelledby="'q-' + item.id"
-          :class="{ open: item.open }"
-        >
-          <div class="faq-a">
-            <p class="mb-2">{{ item.answer }}</p>
-
-            <div class="small text-muted" v-if="item.linkTo">
-              Related: <RouterLink :to="item.linkTo.to">{{ item.linkTo.label }}</RouterLink>
+      <!-- Contact Section -->
+      <div class="mb-5">
+        <h2 class="h4 text-center fw-bold mb-4">Still Have Questions?</h2>
+        <div class="row g-3 g-md-4">
+          <div
+            v-for="(m, idx) in contactMethods"
+            :key="idx"
+            class="col-12 col-md-6 col-lg-3"
+          >
+            <div class="card border-0 gradient-card h-100 p-4 text-center hover-card">
+              <div class="display-6 mb-2">{{ m.icon }}</div>
+              <h3 class="h6 fw-semibold mb-1">{{ m.title }}</h3>
+              <p class="mb-0 fw-medium">{{ m.info }}</p>
+              <p class="small text-muted mb-0">{{ m.description }}</p>
             </div>
           </div>
+        </div>
+      </div>
 
-          <div class="faq-meta small text-muted">
-            <span class="badge bg-light text-dark">{{ item.category }}</span>
+      <!-- Quick Start Guide -->
+      <div class="card border-0 bg-gradient-card mb-5">
+        <div class="card-body p-4 p-md-5">
+          <h2 class="h4 fw-bold mb-1">Ready to Get Started?</h2>
+          <p class="text-muted mb-4">Here's how easy it is to join our community</p>
+
+          <div class="row g-4">
+            <div class="col-12 col-md-4 text-center">
+              <div class="step-circle bg-primary text-white">1</div>
+              <h3 class="h6 fw-semibold">Register Online</h3>
+              <p class="small text-muted">
+                Fill out our quick registration form with your basic information and interests.
+              </p>
+            </div>
+            <div class="col-12 col-md-4 text-center">
+              <div class="step-circle bg-success text-white">2</div>
+              <h3 class="h6 fw-semibold">We'll Contact You</h3>
+              <p class="small text-muted">
+                Our team will reach out within 24 hours to discuss programs that fit your needs.
+              </p>
+            </div>
+            <div class="col-12 col-md-4 text-center">
+              <div class="step-circle bg-warning text-dark">3</div>
+              <h3 class="h6 fw-semibold">Start Playing!</h3>
+              <p class="small text-muted">
+                Join your first session and start enjoying the benefits of community sports.
+              </p>
+            </div>
           </div>
         </div>
-      </article>
-    </section>
+      </div>
 
-    <div v-else class="alert alert-info mt-4">
-      No results. Try a different search term or category.
+      <!-- CTA -->
+      <div class="text-center">
+        <h3 class="h4 fw-bold mb-2">Your Community is Waiting</h3>
+        <p class="text-muted mx-auto mb-3" style="max-width: 36rem;">
+          Join thousands of community members who have discovered better health,
+          lasting friendships, and the joy of being active together.
+        </p>
+        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+          <RouterLink to="/form" class="btn btn-primary btn-lg">Register Now</RouterLink>
+          <RouterLink to="/" class="btn btn-outline-secondary btn-lg">Learn More</RouterLink>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, reactive, ref } from 'vue'
+import { ref } from 'vue'
 
-// FAQ data (no backticks required anywhere)
-const baseFaqs = [
+/* FAQ items (1:1 content with your React example) */
+const faqs = ref([
   {
-    id: 1,
-    category: 'General',
-    question: 'What is Engage360?',
+    question: 'Who can join your programs?',
     answer:
-      'Engage360 is a community platform that helps residents join sport programs, stay informed, and connect with volunteers and staff.',
-    linkTo: { to: '/', label: 'Home' },
-    open: false
+      'Our programs are open to everyone, but we especially focus on supporting marginalized communities including migrants, low-income families, older adults, and anyone facing barriers to accessing sports and physical activity. We welcome people of all fitness levels and backgrounds.'
   },
   {
-    id: 2,
-    category: 'Registration',
-    question: 'How do I register for a program?',
+    question: 'Are your programs really free or affordable?',
     answer:
-      'Go to the Registration page, fill in your details, and submit. You will receive on-screen confirmation.',
-    linkTo: { to: '/form', label: 'Open the Registration Form' },
-    open: false
+      'Yes! We offer a range of free programs and very affordable options. We also have scholarships and payment plans available for those who need them. Our goal is to ensure cost is never a barrier to participation. Contact us to discuss options that work for your situation.'
   },
   {
-    id: 3,
-    category: 'Account',
-    question: 'How do I reset my password?',
+    question: 'What sports and activities do you offer?',
     answer:
-      'Use the “Forgot Password” option on the sign-in screen and follow the email instructions.',
-    open: false
+      'We offer a wide variety of activities including basketball, soccer, swimming, tennis, volleyball, fitness classes, walking groups, yoga, dancing, and cycling. We regularly add new programs based on community interest and needs.'
   },
   {
-    id: 4,
-    category: 'Programs',
-    question: 'Are programs suitable for beginners?',
+    question: 'Do I need to be fit to join?',
     answer:
-      'Yes. Many activities are beginner-friendly and inclusive. Check each program card for level and location details.',
-    linkTo: { to: '/', label: 'See Featured Programs' },
-    open: false
+      'Absolutely not! Our programs cater to all fitness levels, from complete beginners to experienced athletes. We have gentle activities for those starting their fitness journey and more challenging options for those ready to push themselves. Our trained staff will help you find the right fit.'
   },
   {
-    id: 5,
-    category: 'Support',
-    question: 'Who can I contact for support?',
+    question: 'What if I have health conditions or mobility limitations?',
     answer:
-      'Reach out via the Contact/Help link in your dashboard or speak to staff at your local session.',
-    open: false
+      'We welcome participants with health conditions and mobility limitations. Our trained staff and volunteers work with you to adapt activities to your needs. We have experience supporting people with diabetes, arthritis, mental health conditions, and various physical limitations. Please share your needs during registration so we can provide appropriate support.'
   },
   {
-    id: 6,
-    category: 'Privacy',
-    question: 'How is my data protected?',
+    question: 'How do I register and what happens next?',
     answer:
-      'We only collect data necessary to run programs and we apply role-based access. See our privacy policy for details.',
-    open: false
+      'Simply fill out our online registration form - it takes about 5 minutes. Within 24 hours, one of our friendly team members will contact you to discuss program options that match your interests and needs. We\'ll arrange a time for you to visit, meet the team, and try out activities.'
+  },
+  {
+    question: 'What languages do you support?',
+    answer:
+      'We have staff and volunteers who speak multiple languages including Arabic, Mandarin, Vietnamese, Spanish, and Greek. We also work with interpreters when needed. Language should never be a barrier to participation - please let us know what language support you need.'
+  },
+  {
+    question: 'Can I volunteer or get involved in other ways?',
+    answer:
+      'Yes! We\'re always looking for volunteers, coaches, and community champions. Whether you have sports experience or just want to help create a welcoming environment, there\'s a role for you. We provide training and ongoing support for all volunteers.'
+  },
+  {
+    question: 'Where are your programs located?',
+    answer:
+      'We run programs across Melbourne at various community centers, schools, and sports facilities. Most programs are easily accessible by public transport, and we try to offer options in different areas to serve our diverse community.'
+  },
+  {
+    question: 'What safety measures do you have in place?',
+    answer:
+      'Safety is our top priority. All staff and volunteers have current Working with Children Checks and first aid training. We maintain comprehensive insurance, follow strict safety protocols, and always have trained supervisors present. We also work with health professionals to ensure activities are appropriate for participants.'
+  },
+  {
+    question: 'Can family members join together?',
+    answer:
+      'Absolutely! We love when families participate together. We have family-friendly programs and can often accommodate different family members in age-appropriate activities at the same time and location.'
+  },
+  {
+    question: "What if I'm not sure which program is right for me?",
+    answer:
+      "Don't worry! That's exactly why we have our consultation process. After you register, we'll talk with you about your interests, goals, and any concerns. You can also try different programs to see what you enjoy most. There's no pressure to commit to anything long-term initially."
   }
-]
+])
 
-const faqs = reactive(baseFaqs)
-const q = ref('')
-const category = ref('')
+/* Contact cards */
+const contactMethods = ref([
+  { icon: '📞', title: 'Call Us', info: '(03) 9xxx-xxxx', description: 'Mon–Fri, 9am–5pm' },
+  { icon: '✉️', title: 'Email Us', info: 'hello@sportscommunity.org.au', description: 'We respond within 24 hours' },
+  { icon: '📍', title: 'Visit Us', info: '123 Community St, Melbourne VIC', description: 'Drop-in consultations available' },
+  { icon: '💬', title: 'Live Chat', info: 'Available on our website', description: 'Quick answers to simple questions' }
+])
 
-const categories = computed(() =>
-  Array.from(new Set(faqs.map(f => f.category))).sort()
-)
-
-const filtered = computed(() => {
-  const term = q.value.toLowerCase()
-  return faqs.filter(f => {
-    const catOk = category.value ? f.category === category.value : true
-    const text = (f.question + ' ' + f.answer).toLowerCase()
-    const termOk = term ? text.includes(term) : true
-    return catOk && termOk
-  })
-})
-
-function toggle(idx) {
-  const item = filtered.value[idx]
-  if (item) item.open = !item.open
-}
-function expandAll() {
-  filtered.value.forEach(f => (f.open = true))
-}
-function collapseAll() {
-  filtered.value.forEach(f => (f.open = false))
+/* Single-open accordion behavior */
+const openIndex = ref(-1)
+function toggle(i) {
+  openIndex.value = openIndex.value === i ? -1 : i
 }
 </script>
 
 <style scoped>
-.faq { max-width: 920px; }
+.faq-view { min-height: 100vh; }
 
-/* Items */
-.faq-item {
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: .25rem;
-  margin-bottom: .75rem;
-  box-shadow: 0 6px 18px rgba(2,6,23,0.05);
+/* Cards / Gradients */
+.gradient-card {
+  background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+  border-radius: 1rem;
+}
+.bg-gradient-card {
+  background: linear-gradient(180deg, #ffffff 0%, #f6f9ff 100%);
+  border-radius: 1rem;
+}
+.shadow-card { box-shadow: 0 12px 34px rgba(2, 6, 23, 0.08); }
+.hover-card { transition: transform .18s ease, box-shadow .18s ease; }
+.hover-card:hover { transform: translateY(-3px); box-shadow: 0 16px 38px rgba(2, 6, 23, 0.12); }
+
+/* Steps */
+.step-circle {
+  width: 3rem; height: 3rem; border-radius: 999px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto .75rem; font-weight: 700;
 }
 
-/* Question button */
-.faq-q {
+/* Accordion */
+.accordion-vue { border-radius: 12px; }
+.faq-item + .faq-item { border-top: 1px solid #e9eef5; }
+
+.faq-trigger {
   width: 100%;
+  text-align: left;
   background: transparent;
   border: 0;
-  text-align: left;
-  padding: .85rem 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  padding: .85rem 0;
   font-weight: 600;
+  display: flex; align-items: center; justify-content: space-between;
   cursor: pointer;
-  border-radius: 10px;
 }
-.faq-q:focus { outline: 2px solid #93c5fd; outline-offset: 2px; }
-.q-text { padding-right: .75rem; }
+.faq-trigger:focus { outline: 2px solid #93c5fd; outline-offset: 2px; border-radius: 8px; }
 .chev { transition: transform .2s ease; }
 .chev.open { transform: rotate(180deg); }
 
-/* Answer wrapper (animated without JS measuring) */
-.faq-a-wrapper {
+.faq-panel {
   overflow: hidden;
-  transition: max-height .28s ease;
   max-height: 0;
-  border-top: 1px dashed #e5e7eb;
-  margin: 0 .25rem .25rem;
-  border-radius: 0 0 12px 12px;
+  transition: max-height .28s ease;
 }
-.faq-a-wrapper.open { max-height: 600px; } /* large enough for content */
-.faq-a { padding: .75rem 1rem .5rem; }
-.faq-meta { padding: 0 1rem 1rem; }
+.faq-panel.open { max-height: 800px; } /* large enough for content */
+.faq-panel p { padding: 0 0 .75rem 0; }
 
-/* Responsive per rubric */
+/* Responsive tweaks */
 @media (max-width: 575.98px) {
-  .faq { padding-left: .5rem; padding-right: .5rem; }
-  .faq-q { padding: .75rem .85rem; }
-}
-@media (min-width: 992px) and (max-width: 1199.98px) {
-  .faq { max-width: 980px; }
-}
-@media (min-width: 1400px) {
-  .faq { max-width: 1080px; }
+  .faq-view .card-body { padding: 1rem; }
 }
 </style>
