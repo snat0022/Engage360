@@ -79,7 +79,7 @@
                 <label for="email" class="form-label">Email Address *</label>
                 <input id="email" type="email" class="form-control"
                        v-model.trim="form.email"
-                       :class="invalid('email')" @input="clear('email')" />
+                       :class="invalid('email')" @input="clear('email')" autocomplete="email" />
                 <div class="invalid-feedback" v-if="errors.email">{{ errors.email }}</div>
               </div>
               <div class="col-md-6">
@@ -89,7 +89,30 @@
                        :class="invalid('phone')" @input="clear('phone')" />
                 <div class="invalid-feedback" v-if="errors.phone">{{ errors.phone }}</div>
               </div>
+            </div>
 
+            <!-- Passwords -->
+            <div class="row g-3 mt-1">
+              <div class="col-md-6">
+                <label for="password" class="form-label">Password *</label>
+                <input id="password" type="password" class="form-control"
+                       v-model="form.password"
+                       :class="invalid('password')" @input="clear('password')"
+                       minlength="8" autocomplete="new-password" />
+                <div class="form-text">Min 8 characters, include at least one letter and one number.</div>
+                <div class="invalid-feedback" v-if="errors.password">{{ errors.password }}</div>
+              </div>
+              <div class="col-md-6">
+                <label for="confirmPassword" class="form-label">Confirm Password *</label>
+                <input id="confirmPassword" type="password" class="form-control"
+                       v-model="form.confirmPassword"
+                       :class="invalid('confirmPassword')" @input="clear('confirmPassword')"
+                       autocomplete="new-password" />
+                <div class="invalid-feedback" v-if="errors.confirmPassword">{{ errors.confirmPassword }}</div>
+              </div>
+            </div>
+
+            <div class="row g-3 mt-1">
               <div class="col-md-6">
                 <label for="age" class="form-label">Age *</label>
                 <input id="age" type="number" class="form-control" min="16" max="100"
@@ -210,6 +233,7 @@ const sportOptions = [
 // state
 const form = reactive({
   firstName: '', lastName: '', email: '', phone: '', age: '',
+  password: '', confirmPassword: '',
   address: '', emergencyContact: '', emergencyPhone: '',
   interests: [], fitnessLevel: '', healthConditions: '',
   motivation: '', consent: false, newsletter: false
@@ -239,7 +263,7 @@ function validate() {
   formAlert.value = ''
   submitOk.value = false
 
-  // required
+  // required names
   if (!form.firstName.trim()) errors.firstName = 'First name is required'
   if (!form.lastName.trim()) errors.lastName = 'Last name is required'
 
@@ -253,6 +277,13 @@ function validate() {
   const ph = form.phone.replace(/\s/g, '')
   if (!form.phone.trim()) errors.phone = 'Phone number is required'
   else if (!phoneRe.test(ph)) errors.phone = 'Please enter a valid Australian phone number'
+
+  // passwords
+  const strongPw = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/
+  if (!form.password) errors.password = 'Password is required'
+  else if (!strongPw.test(form.password)) errors.password = 'Password must be at least 8 characters and include a letter and a number'
+  if (!form.confirmPassword) errors.confirmPassword = 'Please confirm your password'
+  else if (form.confirmPassword !== form.password) errors.confirmPassword = 'Passwords must match'
 
   // age
   const ageNum = parseInt(form.age, 10)
@@ -287,6 +318,7 @@ async function handleSubmit() {
     // reset form
     Object.assign(form, {
       firstName: '', lastName: '', email: '', phone: '', age: '',
+      password: '', confirmPassword: '',
       address: '', emergencyContact: '', emergencyPhone: '',
       interests: [], fitnessLevel: '', healthConditions: '',
       motivation: '', consent: false, newsletter: false
