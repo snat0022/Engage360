@@ -1,69 +1,129 @@
 <template>
-    <div class="admin-view">
-        <h1>Admin Dashboard</h1>
-        <section>
-            <h2>User Management</h2>
-            <button @click="addUser">Add User</button>
-            <ul>
-                <li v-for="user in users" :key="user.id">
-                    {{ user.name }} - {{ user.role }}
-                    <button @click="editUser(user)">Edit</button>
-                    <button @click="deleteUser(user.id)">Delete</button>
-                </li>
-            </ul>
-        </section>
-        <section>
-            <h2>System Stats</h2>
-            <p>Total Users: {{ users.length }}</p>
-            <p>Active Sessions: {{ stats.activeSessions }}</p>
-        </section>
+  <div class="container py-4">
+    <h1 class="mb-4">Admin Dashboard</h1>
+
+    <!-- Stats Panel -->
+    <div class="row mb-4">
+      <div class="col-md-3" v-for="(stat, key) in stats" :key="key">
+        <div class="card text-center shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">{{ stat.label }}</h5>
+            <p class="display-6 fw-bold">{{ stat.value }}</p>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- User Table -->
+    <h5 class="mb-3">User Management</h5>
+    <div class="d-flex justify-content-end mb-2">
+      <button class="btn btn-primary" @click="createDummyUser">Create User</button>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-if="users.length === 0">
+          <td colspan="5" class="text-center">No users found.</td>
+        </tr>
+        <tr v-for="(user, index) in users" :key="index">
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.role }}</td>
+          <td>
+            <span :class="user.status === 'active' ? 'text-success' : 'text-danger'">
+              {{ user.status }}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-sm btn-outline-danger me-1" @click="deleteUser(index)">Delete</button>
+            <button class="btn btn-sm btn-outline-secondary me-1" @click="toggleStatus(index)">
+              {{ user.status === 'active' ? 'Suspend' : 'Activate' }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
-<script>
-export default {
-    name: 'AdminView',
-    data() {
-        return {
-            users: [
-                { id: 1, name: 'Alice', role: 'Admin' },
-                { id: 2, name: 'Bob', role: 'Editor' },
-                { id: 3, name: 'Charlie', role: 'Viewer' }
-            ],
-            stats: {
-                activeSessions: 5
-            }
-        };
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+
+const users = ref([])
+
+const loadUsers = () => {
+  const stored = localStorage.getItem('vue-auth-users')
+  users.value = stored ? JSON.parse(stored) : []
+}
+
+const saveUsers = () => {
+  localStorage.setItem('vue-auth-users', JSON.stringify(users.value))
+}
+
+const deleteUser = (index) => {
+  if (confirm('Are you sure you want to delete this user?')) {
+    users.value.splice(index, 1)
+    saveUsers()
+  }
+}
+
+const toggleStatus = (index) => {
+  const user = users.value[index]
+  user.status = user.status === 'active' ? 'suspended' : 'active'
+  saveUsers()
+}
+
+const createDummyUser = () => {
+  const newUser = {
+    name: 'New User',
+    email: `user${users.value.length + 1}@mail.com`,
+    password: '123456',
+    role: 'user',
+    status: 'active'
+  }
+  users.value.push(newUser)
+  saveUsers()
+}
+
+const stats = computed(() => {
+  return {
+    total: { label: 'Total Users', value: users.value.length },
+    admins: {
+      label: 'Admins',
+      value: users.value.filter(u => u.role === 'admin').length
     },
-    methods: {
-        addUser() {
-            // Sample logic for adding a user
-            const newId = this.users.length + 1;
-            this.users.push({ id: newId, name: `User${newId}`, role: 'Viewer' });
-        },
-        editUser(user) {
-            // Sample logic for editing a user
-            alert(`Edit user: ${user.name}`);
-        },
-        deleteUser(id) {
-            this.users = this.users.filter(user => user.id !== id);
-        }
+    active: {
+      label: 'Active Users',
+      value: users.value.filter(u => u.status === 'active').length
+    },
+    suspended: {
+      label: 'Suspended Users',
+      value: users.value.filter(u => u.status === 'suspended').length
     }
-};
+  }
+})
+
+onMounted(() => {
+  loadUsers()
+})
 </script>
 
 <style scoped>
-.admin-view {
-    max-width: 600px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: #f9f9f9;
-    border-radius: 8px;
+.card-title {
+  font-size: 1rem;
 }
-h1, h2 {
-    color: #333;
+.display-6 {
+  font-size: 2rem;
 }
-button {
-    margin-left: 8px;
+.table td, .table th {
+  vertical-align: middle;
 }
 </style>

@@ -5,6 +5,7 @@ import FAQ from '../views/FAQ.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import AboutView from '../views/AboutView.vue'  
+import AdminView from '../views/AdminView.vue'
 
 
 const routes = [
@@ -39,6 +40,12 @@ const routes = [
     name: 'Register',
     component: Register,
   },
+  
+  {
+  path: '/admin',
+  name: 'Admin',
+  component: AdminView,
+  }
 ]
 
 const router = createRouter({
