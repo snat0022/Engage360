@@ -6,7 +6,7 @@ import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import AboutView from "../views/AboutView.vue";
 import AdminView from "../views/AdminView.vue";
-import { useAuthStore } from "@/stores/auth";
+import { authStore } from "@/stores/auth";   // ✅ use authStore not useAuthStore
 
 const routes = [
   { path: "/", name: "Home", component: HomeView },
@@ -23,11 +23,9 @@ const router = createRouter({
   routes,
 });
 
+// Role-based guard
 router.beforeEach((to, from, next) => {
-  const store = useAuthStore();
-  if (!store.user) store.loadFromStorage();
-
-  if (to.meta.requiresRole && to.meta.requiresRole !== store.role) {
+  if (to.meta.requiresRole && authStore.getRole() !== to.meta.requiresRole) {
     return next("/login");
   }
   next();

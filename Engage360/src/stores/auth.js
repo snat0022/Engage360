@@ -10,7 +10,7 @@ export const authStore = reactive({
   register(user) {
     const exists = this.users.some(u => u.email === user.email)
     if (exists) throw new Error('Email already registered.')
-    this.users.push(user)
+    this.users.push({ ...user, status: 'active' }) // added status
     localStorage.setItem(AUTH_KEY, JSON.stringify(this.users))
   },
 
