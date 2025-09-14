@@ -15,7 +15,9 @@
             <div class="card-body text-center">
               <div class="display-6 mb-3">🤝</div>
               <h5 class="card-title fw-bold">Community First</h5>
-              <p class="card-text">We collaborate with local partners to make sure our programs reflect real community needs and priorities.</p>
+              <p class="card-text">
+                We collaborate with local partners to make sure our programs reflect real community needs and priorities.
+              </p>
             </div>
           </div>
         </div>
@@ -25,7 +27,9 @@
             <div class="card-body text-center">
               <div class="display-6 mb-3">🌱</div>
               <h5 class="card-title fw-bold">Growth & Wellbeing</h5>
-              <p class="card-text">We support holistic development — physical health, mental wellbeing, confidence, and connection.</p>
+              <p class="card-text">
+                We support holistic development — physical health, mental wellbeing, confidence, and connection.
+              </p>
             </div>
           </div>
         </div>
@@ -35,18 +39,26 @@
             <div class="card-body text-center">
               <div class="display-6 mb-3">🎯</div>
               <h5 class="card-title fw-bold">Accessible for All</h5>
-              <p class="card-text">We work to eliminate barriers to participation, including cost, location, language, and ability.</p>
+              <p class="card-text">
+                We work to eliminate barriers to participation, including cost, location, language, and ability.
+              </p>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- ⭐ Rating Section -->
       <div class="text-center mt-5">
-        <RouterLink to="/form" class="btn btn-primary btn-lg">Join Us Today</RouterLink>
+        <h3 class="mb-3">Rate Our Mission</h3>
+        <Rating itemId="about" />
       </div>
     </div>
   </section>
 </template>
+
+<script setup>
+import Rating from "@/components/Rating.vue";
+</script>
 
 <style scoped>
 .about-section {
