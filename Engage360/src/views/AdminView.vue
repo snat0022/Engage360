@@ -43,9 +43,7 @@
             </span>
           </td>
           <td>
-            <button class="btn btn-sm btn-outline-danger me-1" @click="deleteUser(index)">
-              Delete
-            </button>
+            <button class="btn btn-sm btn-outline-danger me-1" @click="deleteUser(index)">Delete</button>
             <button class="btn btn-sm btn-outline-secondary me-1" @click="toggleStatus(index)">
               {{ user.status === 'active' ? 'Suspend' : 'Activate' }}
             </button>
@@ -54,62 +52,10 @@
       </tbody>
     </table>
 
-    <!-- Content Control -->
-    <h5 class="mt-5 mb-3">Content Control</h5>
-    <div class="alert alert-info">
-      Here you could add/edit/remove pages, posts, or manage media uploads.
-      <br />
-      (Placeholder – extend later as needed.)
-    </div>
-
-    <!-- Ratings Management -->
-    <h5 class="mt-5 mb-3">Ratings Management</h5>
-    <table class="table table-striped align-middle">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>User Email</th>
-          <th>Item</th>
-          <th>Rating</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-if="ratings.length === 0">
-          <td colspan="5" class="text-center text-muted">No ratings found.</td>
-        </tr>
-        <tr v-for="r in ratings" :key="r.id">
-          <td>{{ r.id }}</td>
-          <td>{{ r.userEmail }}</td>
-          <td>{{ r.itemId }}</td>
-          <td>
-            <span class="badge bg-warning text-dark">{{ r.score }}</span>
-          </td>
-          <td>
-            <button class="btn btn-sm btn-outline-danger" @click="deleteRating(r.id)">
-              Delete
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- System & Security -->
-    <h5 class="mt-5 mb-3">System & Security</h5>
-    <div class="alert alert-info mb-3">
-      Monitor login attempts, apply restrictions, and manage security settings.
-    </div>
-
     <!-- Security Logs -->
-    <h6 class="mb-2">Security Logs (Failed Login Attempts)</h6>
+    <h6 class="mb-2 mt-5">Security Logs (Failed Login Attempts)</h6>
     <div class="d-flex justify-content-end mb-2">
-      <button
-        class="btn btn-sm btn-outline-danger"
-        v-if="Object.keys(attempts).length > 0"
-        @click="clearAllAttempts"
-      >
-        Clear All Logs
-      </button>
+      <button class="btn btn-sm btn-outline-danger" v-if="Object.keys(attempts).length > 0" @click="clearAllAttempts">Clear All Logs</button>
     </div>
     <table class="table table-sm table-bordered align-middle">
       <thead>
@@ -123,28 +69,61 @@
         <tr v-for="(count, email) in attempts" :key="email">
           <td>{{ email }}</td>
           <td :class="count >= 3 ? 'text-danger fw-bold' : ''">{{ count }}</td>
-          <td>
-            <button class="btn btn-sm btn-outline-secondary" @click="clearAttempts(email)">
-              Clear
-            </button>
-          </td>
+          <td><button class="btn btn-sm btn-outline-secondary" @click="clearAttempts(email)">Clear</button></td>
         </tr>
         <tr v-if="Object.keys(attempts).length === 0">
-          <td colspan="3" class="text-center text-muted">
-            No failed attempts logged.
-          </td>
+          <td colspan="3" class="text-center text-muted">No failed attempts logged.</td>
         </tr>
       </tbody>
     </table>
+
+    <!-- User Form Submissions -->
+    <h5 class="mt-5 mb-3">User Registration Submissions</h5>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <input v-model="search" type="text" class="form-control w-auto" placeholder="Search by name/email..." />
+      <button class="btn btn-outline-primary ms-2" @click="exportToCSV">Export CSV</button>
+    </div>
+
+    <div class="scrollable-submissions">
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Fitness</th>
+            <th>Interests</th>
+            <th>Submitted</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-if="filteredSubmissions.length === 0">
+            <td colspan="6" class="text-center text-muted">No registrations found.</td>
+          </tr>
+          <tr v-for="(entry, index) in filteredSubmissions" :key="index">
+            <td>{{ entry.firstName || entry.name }} {{ entry.lastName || '' }}</td>
+            <td>{{ entry.email }}</td>
+            <td>{{ entry.phone }}</td>
+            <td>{{ entry.fitnessLevel }}</td>
+            <td>{{ entry.interests?.join(', ') }}</td>
+            <td>{{ formatDate(entry.timestamp) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue"
-import { ratingStore } from "@/stores/ratingStore"
-import { authStore } from "@/stores/auth"
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ratingStore } from '@/stores/ratingStore'
+import { authStore } from '@/stores/auth'
 
 const users = ref([])
+const attempts = ref({})
+const userSubmissions = ref([])
+const search = ref('')
+let submissionInterval = null
 
 const loadUsers = () => {
   const stored = localStorage.getItem("vue-auth-users")
@@ -174,61 +153,101 @@ const createDummyUser = () => {
     email: `user${users.value.length + 1}@mail.com`,
     password: "123456",
     role: "user",
-    status: "active",
+    status: "active"
   }
   users.value.push(newUser)
   saveUsers()
 }
 
-const stats = computed(() => {
-  return {
-    total: { label: "Total Users", value: users.value.length },
-    admins: { label: "Admins", value: users.value.filter((u) => u.role === "admin").length },
-    active: { label: "Active Users", value: users.value.filter((u) => u.status === "active").length },
-    suspended: { label: "Suspended Users", value: users.value.filter((u) => u.status === "suspended").length },
-  }
-})
+const stats = computed(() => ({
+  total: { label: "Total Users", value: users.value.length },
+  admins: { label: "Admins", value: users.value.filter(u => u.role === 'admin').length },
+  active: { label: "Active Users", value: users.value.filter(u => u.status === 'active').length },
+  suspended: { label: "Suspended Users", value: users.value.filter(u => u.status === 'suspended').length }
+}))
 
-// Ratings
-const ratings = computed(() => ratingStore.ratings)
-function deleteRating(id) {
-  ratingStore.removeRating(id)
-}
-
-// Security Logs
-const attempts = ref({})
-
-function loadAttempts() {
+const loadAttempts = () => {
   attempts.value = authStore.getAttemptsMap()
 }
-
-function clearAttempts(email) {
+const clearAttempts = (email) => {
   authStore.clearAttempts(email)
   loadAttempts()
 }
-
-function clearAllAttempts() {
-  for (const email in attempts.value) {
-    authStore.clearAttempts(email)
-  }
+const clearAllAttempts = () => {
+  for (const email in attempts.value) authStore.clearAttempts(email)
   loadAttempts()
+}
+
+const formatDate = (val) => {
+  const d = new Date(val)
+  return isNaN(d) ? 'N/A' : d.toLocaleString()
+}
+
+function loadUserSubmissions() {
+  const data = localStorage.getItem('user-registrations')
+  const raw = data ? JSON.parse(data) : []
+
+  // Deduplicate by email + timestamp
+  const seen = new Set()
+  userSubmissions.value = raw.filter(entry => {
+    const key = `${entry.email}-${entry.timestamp}`
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
+}
+
+
+const filteredSubmissions = computed(() => {
+  if (!search.value) return userSubmissions.value
+  return userSubmissions.value.filter(entry =>
+    `${entry.firstName} ${entry.lastName}`.toLowerCase().includes(search.value.toLowerCase()) ||
+    entry.email?.toLowerCase().includes(search.value.toLowerCase())
+  )
+})
+
+function exportToCSV() {
+  const headers = ['Name', 'Email', 'Phone', 'Fitness Level', 'Interests', 'Timestamp']
+  const rows = userSubmissions.value.map(entry => [
+    `${entry.firstName || ''} ${entry.lastName || ''}`,
+    entry.email,
+    entry.phone,
+    entry.fitnessLevel,
+    entry.interests?.join(' | ') || '',
+    entry.timestamp
+  ])
+
+  const csvContent = [headers, ...rows].map(row => row.join(',')).join('\n')
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = 'registrations.csv'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 }
 
 onMounted(() => {
   loadUsers()
   loadAttempts()
+  loadUserSubmissions()
+  submissionInterval = setInterval(loadUserSubmissions, 5000)
+})
+
+onUnmounted(() => {
+  clearInterval(submissionInterval)
 })
 </script>
 
 <style scoped>
-.card-title {
-  font-size: 1rem;
-}
-.display-6 {
-  font-size: 2rem;
-}
-.table td,
-.table th {
-  vertical-align: middle;
+.card-title { font-size: 1rem; }
+.display-6 { font-size: 2rem; }
+.table td, .table th { vertical-align: middle; }
+.scrollable-submissions {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #e3e3e3;
+  border-radius: 8px;
 }
 </style>

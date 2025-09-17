@@ -1,5 +1,6 @@
-// Simple sanitization to prevent XSS
+// src/utils/sanitize.js
 export function sanitize(input) {
-  if (typeof input !== "string") return input
-  return input.replace(/</g, "&lt;").replace(/>/g, "&gt;").trim()
+  const el = document.createElement('div')
+  el.innerText = input
+  return el.innerHTML
 }
