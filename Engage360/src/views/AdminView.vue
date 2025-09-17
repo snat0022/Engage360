@@ -96,41 +96,77 @@
 
     <!-- System & Security -->
     <h5 class="mt-5 mb-3">System & Security</h5>
-    <div class="alert alert-info">
+    <div class="alert alert-info mb-3">
       Monitor login attempts, apply restrictions, and manage security settings.
-      <br />
-      (Placeholder – here we’ll implement BR C.4 like XSS protection, validation logs, etc.)
     </div>
+
+    <!-- Security Logs -->
+    <h6 class="mb-2">Security Logs (Failed Login Attempts)</h6>
+    <div class="d-flex justify-content-end mb-2">
+      <button
+        class="btn btn-sm btn-outline-danger"
+        v-if="Object.keys(attempts).length > 0"
+        @click="clearAllAttempts"
+      >
+        Clear All Logs
+      </button>
+    </div>
+    <table class="table table-sm table-bordered align-middle">
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Failed Attempts</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(count, email) in attempts" :key="email">
+          <td>{{ email }}</td>
+          <td :class="count >= 3 ? 'text-danger fw-bold' : ''">{{ count }}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-secondary" @click="clearAttempts(email)">
+              Clear
+            </button>
+          </td>
+        </tr>
+        <tr v-if="Object.keys(attempts).length === 0">
+          <td colspan="3" class="text-center text-muted">
+            No failed attempts logged.
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import { ratingStore } from "@/stores/ratingStore";
+import { ref, computed, onMounted } from "vue"
+import { ratingStore } from "@/stores/ratingStore"
+import { authStore } from "@/stores/auth"
 
-const users = ref([]);
+const users = ref([])
 
 const loadUsers = () => {
-  const stored = localStorage.getItem("vue-auth-users");
-  users.value = stored ? JSON.parse(stored) : [];
-};
+  const stored = localStorage.getItem("vue-auth-users")
+  users.value = stored ? JSON.parse(stored) : []
+}
 
 const saveUsers = () => {
-  localStorage.setItem("vue-auth-users", JSON.stringify(users.value));
-};
+  localStorage.setItem("vue-auth-users", JSON.stringify(users.value))
+}
 
 const deleteUser = (index) => {
   if (confirm("Are you sure you want to delete this user?")) {
-    users.value.splice(index, 1);
-    saveUsers();
+    users.value.splice(index, 1)
+    saveUsers()
   }
-};
+}
 
 const toggleStatus = (index) => {
-  const user = users.value[index];
-  user.status = user.status === "active" ? "suspended" : "active";
-  saveUsers();
-};
+  const user = users.value[index]
+  user.status = user.status === "active" ? "suspended" : "active"
+  saveUsers()
+}
 
 const createDummyUser = () => {
   const newUser = {
@@ -139,10 +175,10 @@ const createDummyUser = () => {
     password: "123456",
     role: "user",
     status: "active",
-  };
-  users.value.push(newUser);
-  saveUsers();
-};
+  }
+  users.value.push(newUser)
+  saveUsers()
+}
 
 const stats = computed(() => {
   return {
@@ -150,19 +186,38 @@ const stats = computed(() => {
     admins: { label: "Admins", value: users.value.filter((u) => u.role === "admin").length },
     active: { label: "Active Users", value: users.value.filter((u) => u.status === "active").length },
     suspended: { label: "Suspended Users", value: users.value.filter((u) => u.status === "suspended").length },
-  };
-});
+  }
+})
 
-// Ratings from store
-const ratings = computed(() => ratingStore.ratings);
-
+// Ratings
+const ratings = computed(() => ratingStore.ratings)
 function deleteRating(id) {
-  ratingStore.removeRating(id);
+  ratingStore.removeRating(id)
+}
+
+// Security Logs
+const attempts = ref({})
+
+function loadAttempts() {
+  attempts.value = authStore.getAttemptsMap()
+}
+
+function clearAttempts(email) {
+  authStore.clearAttempts(email)
+  loadAttempts()
+}
+
+function clearAllAttempts() {
+  for (const email in attempts.value) {
+    authStore.clearAttempts(email)
+  }
+  loadAttempts()
 }
 
 onMounted(() => {
-  loadUsers();
-});
+  loadUsers()
+  loadAttempts()
+})
 </script>
 
 <style scoped>

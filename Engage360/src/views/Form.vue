@@ -223,14 +223,13 @@
 
 <script setup>
 import { reactive, ref } from 'vue'
+import { sanitize } from '@/utils/sanitize'
 
-// options
 const sportOptions = [
   'Basketball','Soccer','Swimming','Tennis','Volleyball',
   'Fitness Classes','Walking Groups','Yoga','Dancing','Cycling'
 ]
 
-// state
 const form = reactive({
   firstName: '', lastName: '', email: '', phone: '', age: '',
   password: '', confirmPassword: '',
@@ -243,7 +242,6 @@ const formAlert = ref('')
 const submitOk  = ref(false)
 const submitting = ref(false)
 
-// helpers
 const clear = (field) => { if (errors[field]) delete errors[field]; formAlert.value = '' }
 const invalid = (field) => (errors[field] ? 'is-invalid' : '')
 
@@ -258,47 +256,38 @@ function toggleInterest(sport, checked) {
 }
 
 function validate() {
-  // reset
   Object.keys(errors).forEach(k => delete errors[k])
   formAlert.value = ''
   submitOk.value = false
 
-  // required names
   if (!form.firstName.trim()) errors.firstName = 'First name is required'
   if (!form.lastName.trim()) errors.lastName = 'Last name is required'
 
-  // email
   const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!form.email.trim()) errors.email = 'Email is required'
   else if (!emailRe.test(form.email)) errors.email = 'Please enter a valid email address'
 
-  // AU phone
   const phoneRe = /^(\+61|0)[2-9]\d{8}$/
   const ph = form.phone.replace(/\s/g, '')
   if (!form.phone.trim()) errors.phone = 'Phone number is required'
   else if (!phoneRe.test(ph)) errors.phone = 'Please enter a valid Australian phone number'
 
-  // passwords
   const strongPw = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/
   if (!form.password) errors.password = 'Password is required'
   else if (!strongPw.test(form.password)) errors.password = 'Password must be at least 8 characters and include a letter and a number'
   if (!form.confirmPassword) errors.confirmPassword = 'Please confirm your password'
   else if (form.confirmPassword !== form.password) errors.confirmPassword = 'Passwords must match'
 
-  // age
   const ageNum = parseInt(form.age, 10)
   if (!form.age.trim()) errors.age = 'Age is required'
   else if (isNaN(ageNum) || ageNum < 16 || ageNum > 100) errors.age = 'Age must be between 16 and 100'
 
-  // emergency
   if (!form.emergencyContact.trim()) errors.emergencyContact = 'Emergency contact is required'
   if (!form.emergencyPhone.trim()) errors.emergencyPhone = 'Emergency phone is required'
 
-  // fitness & interests
   if (!form.fitnessLevel) errors.fitnessLevel = 'Please select your fitness level'
   if (form.interests.length === 0) errors.interests = 'Please select at least one sport interest'
 
-  // consent
   if (!form.consent) errors.consent = 'You must agree to the terms and conditions'
 
   return Object.keys(errors).length === 0
@@ -311,11 +300,21 @@ async function handleSubmit() {
   }
   submitting.value = true
   try {
-    // simulate API latency
     await new Promise(r => setTimeout(r, 1200))
+
+    // Sanitize before using/storing
+    form.firstName = sanitize(form.firstName)
+    form.lastName = sanitize(form.lastName)
+    form.email = sanitize(form.email)
+    form.phone = sanitize(form.phone)
+    form.address = sanitize(form.address)
+    form.emergencyContact = sanitize(form.emergencyContact)
+    form.emergencyPhone = sanitize(form.emergencyPhone)
+    form.healthConditions = sanitize(form.healthConditions)
+    form.motivation = sanitize(form.motivation)
+
     submitOk.value = true
 
-    // reset form
     Object.assign(form, {
       firstName: '', lastName: '', email: '', phone: '', age: '',
       password: '', confirmPassword: '',
@@ -330,28 +329,19 @@ async function handleSubmit() {
 </script>
 
 <style scoped>
-/* page bg token */
 .bg-muted { background: #f6f9fc; }
-
-/* cards */
 .gradient-card {
   background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
   border-radius: 1rem;
 }
 .shadow-card { box-shadow: 0 14px 34px rgba(2,6,23,.08); }
-
-/* form */
 .min-h { min-height: 5rem; }
 .section-title {
   font-size: 1rem; font-weight: 700; margin: 1.25rem 0 .75rem;
   display: flex; align-items: center; gap: .5rem;
 }
 .section-title span { color: #0d6efd; }
-
-/* spacing helper */
 .space-y > * + * { margin-top: 1rem; }
-
-/* responsiveness per rubric */
 @media (max-width: 575.98px) {
   .registration-page .card-body { padding: 1rem; }
 }
