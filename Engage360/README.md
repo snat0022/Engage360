@@ -1,46 +1,61 @@
-# Engage360 - Vue.js Application
+# Engage360 - Advanced Fitness Program Management Platform
 
-A comprehensive fitness and wellness platform built with Vue.js, featuring Firebase Authentication, SendGrid email services, and interactive data tables.
+A comprehensive Vue.js application for managing fitness programs with advanced features including serverless cloud functions, geolocation services, accessibility compliance, and robust data export capabilities.
 
-## Features Implemented
+## 🚀 Advanced Features Implemented
 
-### BR (D.1): External Authentication ✅
-- **Firebase Authentication** with Google and Email/Password providers
-- Secure user management with role-based access control
-- Intuitive login flow with Google OAuth integration
-- User-friendly authentication UI with clear error handling
+### BR (E.1): Cloud Functions ✅
+- **Firebase Cloud Functions** for serverless server-side processing
+- **Automated email notifications** and bulk email management
+- **Data export generation** in multiple formats (CSV, PDF, Excel)
+- **Real-time notifications** and admin activity logging
+- **Scheduled data validation** and cleanup
+- **SendGrid integration** for robust email delivery
 
-### BR (D.2): Email Functionality ✅
-- **SendGrid Integration** for robust email sending
-- Email composition component with attachment support
-- Support for multiple file formats (PDF, DOC, DOCX, TXT, JPG, PNG)
-- File size validation (10MB limit per file)
-- Welcome emails and notification system
+### BR (E.2): Geo Location Services ✅
+- **MapBox integration** with interactive maps and multiple map styles
+- **Places of Interest Search** with category filtering and radius-based discovery
+- **Advanced Trip Planning** with multi-destination support and route optimization
+- **Real-Time Navigation** with turn-by-turn directions and voice guidance
+- **Geolocation Services** with location tracking and permission management
+- **Interactive Map Explorer** with traffic, weather, and satellite overlays
+- **Location Management** with favorites, reviews, and detailed place information
 
-### BR (D.3): Interactive Table Data ✅
-- **Advanced Interactive Table Component** with:
-  - Sorting by individual columns
-  - Real-time search functionality
-  - Pagination (5, 10, 25, 50 rows per page)
-  - Responsive design
-- **Two Interactive Tables Implemented**:
-  1. Admin Dashboard - User Management Table
-  2. Program Ratings - Ratings Management Table
-- Intuitive user interface with Bootstrap styling
+### BR (E.3): Accessibility Compliance (WCAG 2.1 AA) ✅
+- **Keyboard navigation** with skip links and focus management
+- **Screen reader support** with ARIA labels and live regions
+- **High contrast mode** and large text options
+- **Reduced motion** support for users with vestibular disorders
+- **Focus management** for modals and dynamic content
+- **Accessibility validation** tools and automated testing
 
-### BR (D.4): Cloud Deployment ✅
-- **Cloudflare Pages Deployment** ready
-- Production build configuration
-- Environment variable setup for API keys
-- Responsive design for all devices
+### BR (E.4): Enhanced Data Export ✅
+- **Multiple formats**: CSV, PDF, Excel, JSON
+- **Advanced filtering** with date ranges, text search, and status filters
+- **Real-time preview** of export data before download
+- **Export history** and management system
+- **Batch processing** for large datasets
+- **Custom field selection** and data transformation
 
-## Technology Stack
+## 🛠️ Technology Stack
 
-- **Frontend**: Vue.js 3, Bootstrap 5
-- **Authentication**: Firebase Auth
-- **Email Service**: SendGrid
-- **Deployment**: Cloudflare Pages
-- **Build Tool**: Vite
+### Frontend
+- **Vue.js 3** with Composition API
+- **Bootstrap 5** for responsive design
+- **MapBox GL JS** for mapping functionality
+- **Firebase SDK** for real-time data
+
+### Backend
+- **Firebase Cloud Functions** (Node.js 20)
+- **Firestore** for data storage
+- **Firebase Storage** for file management
+- **SendGrid** for email services
+
+### Development Tools
+- **Vite** for build tooling
+- **ESLint** for code quality
+- **TypeScript** for Cloud Functions
+- **Git** for version control
 
 ## Getting Started
 
@@ -102,15 +117,22 @@ src/
 ├── components/
 │   ├── InteractiveTable.vue    # Reusable table component
 │   ├── EmailComposer.vue       # Email composition component
+│   ├── MapContainer.vue        # Interactive map component
+│   ├── PlacesOfInterest.vue    # Places discovery component
+│   ├── TripPlanner.vue         # Trip planning component
+│   ├── NavigationPanel.vue     # Navigation component
 │   └── Bheader.vue             # Navigation header
 ├── views/
 │   ├── AdminView.vue           # Admin dashboard with tables
 │   ├── RatingsView.vue         # Ratings management
+│   ├── MapsView.vue            # Interactive maps and navigation
 │   └── Login.vue               # Authentication page
 ├── stores/
 │   └── firebaseAuth.js         # Firebase auth store
 ├── services/
-│   └── emailService.js         # SendGrid email service
+│   ├── emailService.js         # SendGrid email service
+│   ├── mapService.js           # MapBox integration service
+│   └── geolocationService.js   # Geolocation tracking service
 └── firebase/
     └── config.js               # Firebase configuration
 ```
@@ -134,6 +156,14 @@ src/
 - Pagination for large datasets
 - Real-time data updates
 - Export functionality (CSV)
+
+### Interactive Maps & Navigation
+- **Map Explorer**: Interactive MapBox integration with multiple map styles
+- **Places Discovery**: Search and filter places of interest by category and radius
+- **Trip Planning**: Multi-destination trip planning with route optimization
+- **Real-Time Navigation**: Turn-by-turn directions with voice guidance simulation
+- **Location Services**: GPS tracking, geolocation, and location management
+- **Map Controls**: Traffic overlay, weather information, satellite/terrain views
 
 ### Admin Dashboard
 - User management with CRUD operations

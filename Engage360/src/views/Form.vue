@@ -40,42 +40,62 @@
             <h3 class="section-title"><span>✓</span> Personal Information</h3>
             <div class="row g-3">
               <div class="col-md-6">
-                <label class="form-label">First Name *</label>
+                <label class="form-label" for="firstName">First Name *</label>
                 <input
+                  id="firstName"
+                  name="firstName"
+                  type="text"
                   class="form-control"
                   v-model.trim="form.firstName"
                   :class="invalid('firstName')"
                   @input="clear('firstName')"
+                  autocomplete="given-name"
+                  required
                 />
                 <div class="invalid-feedback" v-if="errors.firstName">{{ errors.firstName }}</div>
               </div>
               <div class="col-md-6">
-                <label class="form-label">Last Name *</label>
+                <label class="form-label" for="lastName">Last Name *</label>
                 <input
+                  id="lastName"
+                  name="lastName"
+                  type="text"
                   class="form-control"
                   v-model.trim="form.lastName"
                   :class="invalid('lastName')"
                   @input="clear('lastName')"
+                  autocomplete="family-name"
+                  required
                 />
                 <div class="invalid-feedback" v-if="errors.lastName">{{ errors.lastName }}</div>
               </div>
               <div class="col-md-6">
-                <label class="form-label">Email *</label>
+                <label class="form-label" for="email">Email *</label>
                 <input
+                  id="email"
+                  name="email"
+                  type="email"
                   class="form-control"
                   v-model.trim="form.email"
                   :class="invalid('email')"
                   @input="clear('email')"
+                  autocomplete="email"
+                  required
                 />
                 <div class="invalid-feedback" v-if="errors.email">{{ errors.email }}</div>
               </div>
               <div class="col-md-6">
-                <label class="form-label">Phone *</label>
+                <label class="form-label" for="phone">Phone *</label>
                 <input
+                  id="phone"
+                  name="phone"
+                  type="tel"
                   class="form-control"
                   v-model.trim="form.phone"
                   :class="invalid('phone')"
                   @input="clear('phone')"
+                  autocomplete="tel"
+                  required
                 />
                 <div class="invalid-feedback" v-if="errors.phone">{{ errors.phone }}</div>
               </div>
@@ -85,24 +105,34 @@
             <h3 class="section-title mt-4"><span>✓</span> Emergency Contact</h3>
             <div class="row g-3">
               <div class="col-md-6">
-                <label class="form-label">Contact Name *</label>
+                <label class="form-label" for="emergencyContact">Contact Name *</label>
                 <input
+                  id="emergencyContact"
+                  name="emergencyContact"
+                  type="text"
                   class="form-control"
                   v-model.trim="form.emergencyContact"
                   :class="invalid('emergencyContact')"
                   @input="clear('emergencyContact')"
+                  autocomplete="name"
+                  required
                 />
                 <div class="invalid-feedback" v-if="errors.emergencyContact">
                   {{ errors.emergencyContact }}
                 </div>
               </div>
               <div class="col-md-6">
-                <label class="form-label">Contact Phone *</label>
+                <label class="form-label" for="emergencyPhone">Contact Phone *</label>
                 <input
+                  id="emergencyPhone"
+                  name="emergencyPhone"
+                  type="tel"
                   class="form-control"
                   v-model.trim="form.emergencyPhone"
                   :class="invalid('emergencyPhone')"
                   @input="clear('emergencyPhone')"
+                  autocomplete="tel"
+                  required
                 />
                 <div class="invalid-feedback" v-if="errors.emergencyPhone">
                   {{ errors.emergencyPhone }}
@@ -133,11 +163,16 @@
 
             <!-- Fitness -->
             <h3 class="section-title mt-4"><span>✓</span> Fitness Level *</h3>
+            <label class="form-label sr-only" for="fitnessLevel">Fitness Level</label>
             <select
+              id="fitnessLevel"
+              name="fitnessLevel"
               class="form-select"
               v-model="form.fitnessLevel"
               :class="invalid('fitnessLevel')"
               @change="clear('fitnessLevel')"
+              autocomplete="off"
+              required
             >
               <option disabled value="">Select your fitness level</option>
               <option>Beginner</option>
@@ -151,10 +186,28 @@
 
             <!-- Optional Info -->
             <h3 class="section-title mt-4"><span>✓</span> Health Info</h3>
-            <textarea class="form-control" v-model.trim="form.healthConditions"></textarea>
+            <label class="form-label" for="healthConditions">Health Information (Optional)</label>
+            <textarea 
+              id="healthConditions"
+              name="healthConditions"
+              class="form-control" 
+              v-model.trim="form.healthConditions"
+              autocomplete="off"
+              rows="3"
+              placeholder="Please describe any health conditions or concerns..."
+            ></textarea>
 
             <h3 class="section-title mt-4"><span>✓</span> Motivation</h3>
-            <textarea class="form-control" v-model.trim="form.motivation"></textarea>
+            <label class="form-label" for="motivation">What motivates you to join our programs? (Optional)</label>
+            <textarea 
+              id="motivation"
+              name="motivation"
+              class="form-control" 
+              v-model.trim="form.motivation"
+              autocomplete="off"
+              rows="3"
+              placeholder="Tell us what drives you to participate in sports and community activities..."
+            ></textarea>
 
             <!-- Consent -->
             <div class="form-check mt-4">
@@ -187,13 +240,21 @@
 <script setup>
 import { reactive, ref, onMounted } from 'vue'
 import { sanitize } from '@/utils/sanitize'
-import { authStore } from '@/stores/auth'
+import { firebaseAuthStore } from '@/stores/firebaseAuth'
 import { useRouter } from 'vue-router'
 import { registrationStore } from '@/stores/registrationStore'
 
 const router = useRouter()
-onMounted(() => {
-  if (!authStore.isLoggedIn()) {
+
+// Wait for Firebase auth to initialize before checking login status
+onMounted(async () => {
+  // Wait for Firebase auth to finish loading
+  while (firebaseAuthStore.loading) {
+    await new Promise(resolve => setTimeout(resolve, 50))
+  }
+  
+  // Now check if user is logged in after auth is fully initialized
+  if (!firebaseAuthStore.isLoggedIn()) {
     router.push('/login')
   }
 })

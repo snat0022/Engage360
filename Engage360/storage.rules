@@ -1,0 +1,30 @@
+rules_version = '2';
+
+// Craft rules based on data in your Firestore database
+// allow write: if firestore.get(
+//    /databases/(default)/documents/users/$(request.auth.uid)).data.isAdmin;
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Allow authenticated users to read their own files
+    match /exports/{fileName} {
+      allow read: if request.auth != null;
+    }
+    
+    // Allow admins to write export files
+    match /exports/{fileName} {
+      allow write: if request.auth != null && 
+        firestore.get(/databases/(default)/documents/adminRoles/$(request.auth.token.email)).data.isAdmin == true;
+    }
+    
+    // Allow users to upload profile images
+    match /profile-images/{userId}/{fileName} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Allow admins to manage all files
+    match /{allPaths=**} {
+      allow read, write: if request.auth != null && 
+        firestore.get(/databases/(default)/documents/adminRoles/$(request.auth.token.email)).data.isAdmin == true;
+    }
+  }
+}

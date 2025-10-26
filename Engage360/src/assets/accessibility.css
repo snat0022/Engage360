@@ -1,0 +1,797 @@
+/* Accessibility Styles - WCAG 2.1 AA Compliance */
+
+/* Screen Reader Only Content */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Skip Links */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 10000;
+  font-weight: bold;
+  transition: top 0.3s;
+}
+
+.skip-link:focus {
+  top: 6px;
+  color: #fff;
+  text-decoration: none;
+  background: #000;
+  border: 2px solid #fff;
+}
+
+/* Focus Management */
+.focus-visible {
+  outline: 2px solid #004085 !important; /* Darker blue for better contrast */
+  outline-offset: 2px !important;
+}
+
+/* Remove default focus outline and add custom one */
+*:focus {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2px solid #004085 !important; /* Darker blue for better contrast */
+  outline-offset: 2px !important;
+}
+
+/* High contrast focus for better visibility */
+@media (prefers-contrast: high) {
+  *:focus-visible {
+    outline: 3px solid #000 !important;
+    outline-offset: 2px !important;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.reduced-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Color Contrast Improvements */
+/* Ensure minimum 4.5:1 contrast ratio for normal text */
+.text-primary {
+  color: #0056b3 !important; /* Darker blue for better contrast */
+}
+
+.text-secondary {
+  color: #495057 !important; /* Darker gray for better contrast */
+}
+
+.text-muted {
+  color: #6c757d !important; /* Ensure sufficient contrast */
+}
+
+/* Button Contrast */
+.btn-primary {
+  background-color: #004085 !important; /* Darker blue for better contrast */
+  border-color: #004085 !important;
+  color: #fff !important;
+}
+
+.btn-primary:hover {
+  background-color: #003366 !important; /* Even darker on hover */
+  border-color: #003366 !important;
+}
+
+.btn-primary:focus {
+  background-color: #004085 !important;
+  border-color: #004085 !important;
+  color: #fff !important;
+  box-shadow: 0 0 0 0.2rem rgba(0, 64, 133, 0.5) !important;
+}
+
+.btn-secondary {
+  background-color: #6c757d !important;
+  border-color: #6c757d !important;
+  color: #fff !important;
+}
+
+.btn-outline-primary {
+  color: #004085 !important; /* Darker blue for better contrast */
+  border-color: #004085 !important;
+  background-color: transparent !important;
+}
+
+.btn-outline-primary:hover {
+  background-color: #004085 !important;
+  border-color: #004085 !important;
+  color: #fff !important;
+}
+
+.btn-outline-primary:focus {
+  color: #004085 !important;
+  border-color: #004085 !important;
+  box-shadow: 0 0 0 0.2rem rgba(0, 64, 133, 0.5) !important;
+}
+
+/* Link Contrast */
+a {
+  color: #004085 !important; /* Darker blue for better contrast */
+  text-decoration: underline;
+}
+
+a:hover {
+  color: #003366 !important; /* Even darker on hover */
+  text-decoration: underline;
+}
+
+a:focus {
+  color: #004085 !important;
+  text-decoration: underline;
+  outline: 2px solid #004085 !important;
+  outline-offset: 2px !important;
+}
+
+/* Form Elements */
+.form-control {
+  border: 2px solid #ced4da !important;
+  border-radius: 4px !important;
+  color: #212529 !important; /* Ensure text color has sufficient contrast */
+}
+
+.form-control:focus {
+  border-color: #004085 !important; /* Darker blue for better contrast */
+  box-shadow: 0 0 0 0.2rem rgba(0, 64, 133, 0.25) !important;
+  color: #212529 !important;
+}
+
+.form-control::placeholder {
+  color: #6c757d !important; /* Ensure placeholder text meets contrast requirements */
+  opacity: 1 !important;
+}
+
+.form-label {
+  font-weight: 600 !important;
+  color: #212529 !important;
+}
+
+.form-text {
+  color: #495057 !important; /* Ensure form help text has sufficient contrast */
+  font-size: 0.875rem !important;
+}
+
+.form-check-label {
+  color: #212529 !important; /* Ensure checkbox labels have sufficient contrast */
+  font-weight: 500 !important;
+}
+
+.form-select {
+  color: #212529 !important; /* Ensure select text has sufficient contrast */
+  background-color: #fff !important;
+}
+
+.form-select:focus {
+  border-color: #004085 !important; /* Darker blue for better contrast */
+  box-shadow: 0 0 0 0.2rem rgba(0, 64, 133, 0.25) !important;
+  color: #212529 !important;
+}
+
+.form-select option {
+  color: #212529 !important;
+  background-color: #fff !important;
+}
+
+.form-select option:disabled {
+  color: #6c757d !important; /* Ensure disabled options have sufficient contrast */
+  background-color: #f8f9fa !important;
+}
+
+/* Ensure all text elements have sufficient contrast */
+h1, h2, h3, h4, h5, h6 {
+  color: #212529 !important;
+}
+
+p, span, div, li {
+  color: #212529 !important;
+}
+
+/* Improve button contrast */
+.btn-outline-primary {
+  color: #0056b3 !important;
+  border-color: #0056b3 !important;
+  background-color: transparent !important;
+}
+
+.btn-outline-primary:hover {
+  background-color: #0056b3 !important;
+  border-color: #0056b3 !important;
+  color: #fff !important;
+}
+
+/* Required field indicators */
+.form-control[required] {
+  border-left: 4px solid #dc3545 !important;
+}
+
+.form-control[required] + .form-label::after {
+  content: " *";
+  color: #dc3545;
+  font-weight: bold;
+}
+
+/* Error states */
+.form-control.is-invalid {
+  border-color: #dc3545 !important;
+}
+
+.invalid-feedback {
+  color: #dc3545 !important;
+  font-weight: 500 !important;
+}
+
+/* Success states */
+.form-control.is-valid {
+  border-color: #28a745 !important;
+}
+
+.valid-feedback {
+  color: #28a745 !important;
+  font-weight: 500 !important;
+}
+
+/* Navigation Accessibility */
+.nav-link {
+  padding: 0.75rem 1rem !important;
+  border-radius: 4px !important;
+  transition: background-color 0.2s !important;
+}
+
+.nav-link:hover {
+  background-color: #f8f9fa !important;
+}
+
+.nav-link:focus {
+  background-color: #e9ecef !important;
+  outline: 2px solid #007bff !important;
+  outline-offset: 2px !important;
+}
+
+.nav-link.active {
+  background-color: #007bff !important;
+  color: #fff !important;
+}
+
+/* Card Accessibility */
+.card {
+  border: 1px solid #dee2e6 !important;
+  border-radius: 8px !important;
+}
+
+.card-header {
+  background-color: #f8f9fa !important;
+  border-bottom: 1px solid #dee2e6 !important;
+  font-weight: 600 !important;
+}
+
+/* Table Accessibility */
+.table {
+  border-collapse: collapse !important;
+}
+
+.table th {
+  background-color: #f8f9fa !important;
+  font-weight: 600 !important;
+  border: 1px solid #dee2e6 !important;
+  padding: 0.75rem !important;
+}
+
+.table td {
+  border: 1px solid #dee2e6 !important;
+  padding: 0.75rem !important;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Modal Accessibility */
+.modal {
+  z-index: 1050 !important;
+}
+
+.modal-dialog {
+  margin: 1.75rem auto !important;
+}
+
+.modal-content {
+  border: 1px solid #dee2e6 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.modal-header {
+  border-bottom: 1px solid #dee2e6 !important;
+  padding: 1rem !important;
+}
+
+.modal-title {
+  font-weight: 600 !important;
+  color: #212529 !important;
+}
+
+.modal-body {
+  padding: 1rem !important;
+}
+
+.modal-footer {
+  border-top: 1px solid #dee2e6 !important;
+  padding: 1rem !important;
+}
+
+/* Close button accessibility */
+.btn-close {
+  background: none !important;
+  border: none !important;
+  font-size: 1.5rem !important;
+  font-weight: bold !important;
+  color: #000 !important;
+  opacity: 0.5 !important;
+  padding: 0.25rem 0.5rem !important;
+}
+
+.btn-close:hover {
+  opacity: 0.75 !important;
+}
+
+.btn-close:focus {
+  opacity: 1 !important;
+  outline: 2px solid #007bff !important;
+  outline-offset: 2px !important;
+}
+
+/* Alert Accessibility */
+.alert {
+  border: 1px solid transparent !important;
+  border-radius: 4px !important;
+  padding: 0.75rem 1rem !important;
+  margin-bottom: 1rem !important;
+}
+
+.alert-primary {
+  background-color: #cce7ff !important;
+  border-color: #b3d7ff !important;
+  color: #004085 !important;
+}
+
+.alert-info {
+  background-color: #d1ecf1 !important;
+  border-color: #bee5eb !important;
+  color: #0c5460 !important; /* Darker text for better contrast */
+}
+
+.alert-success {
+  background-color: #d4edda !important;
+  border-color: #c3e6cb !important;
+  color: #155724 !important;
+}
+
+.alert-danger {
+  background-color: #f8d7da !important;
+  border-color: #f5c6cb !important;
+  color: #721c24 !important;
+}
+
+.alert-warning {
+  background-color: #fff3cd !important;
+  border-color: #ffeaa7 !important;
+  color: #856404 !important;
+}
+
+/* Progress Bar Accessibility */
+.progress {
+  height: 1rem !important;
+  background-color: #e9ecef !important;
+  border-radius: 4px !important;
+}
+
+.progress-bar {
+  background-color: #007bff !important;
+  border-radius: 4px !important;
+}
+
+/* Badge Accessibility */
+.badge {
+  font-weight: 600 !important;
+  padding: 0.375rem 0.5rem !important;
+  border-radius: 4px !important;
+}
+
+.badge-primary {
+  background-color: #007bff !important;
+  color: #fff !important;
+}
+
+.badge-secondary {
+  background-color: #6c757d !important;
+  color: #fff !important;
+}
+
+/* Tooltip Accessibility */
+.tooltip {
+  font-size: 0.875rem !important;
+  max-width: 200px !important;
+}
+
+.tooltip-inner {
+  background-color: #000 !important;
+  color: #fff !important;
+  padding: 0.5rem 0.75rem !important;
+  border-radius: 4px !important;
+}
+
+/* Map Accessibility */
+.map-container {
+  position: relative !important;
+}
+
+.map-container:focus {
+  outline: 2px solid #007bff !important;
+  outline-offset: 2px !important;
+}
+
+/* Map controls accessibility */
+.mapboxgl-ctrl {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-radius: 4px !important;
+}
+
+.mapboxgl-ctrl button {
+  background: transparent !important;
+  border: none !important;
+  color: #333 !important;
+  font-size: 18px !important;
+  padding: 8px !important;
+  cursor: pointer !important;
+}
+
+.mapboxgl-ctrl button:hover {
+  background: rgba(0, 0, 0, 0.1) !important;
+}
+
+.mapboxgl-ctrl button:focus {
+  outline: 2px solid #004085 !important;
+  outline-offset: 2px !important;
+}
+
+/* Map control panel buttons */
+.control-btn {
+  background-color: #004085 !important; /* Darker blue for better contrast */
+  color: #fff !important;
+  border: 1px solid #004085 !important;
+}
+
+.control-btn:hover {
+  background-color: #003366 !important;
+  border-color: #003366 !important;
+}
+
+.control-btn.active {
+  background-color: #004085 !important;
+  color: #fff !important;
+}
+
+/* Tab buttons */
+.tab-btn {
+  color: #004085 !important; /* Darker blue for better contrast */
+  background-color: transparent !important;
+  border: 1px solid transparent !important;
+}
+
+.tab-btn:hover {
+  background-color: #f8f9fa !important;
+  color: #004085 !important;
+}
+
+.tab-btn.active {
+  background-color: #004085 !important;
+  color: #fff !important;
+  border-color: #004085 !important;
+}
+
+/* Style buttons */
+.style-btn {
+  background-color: #004085 !important; /* Darker blue for better contrast */
+  color: #fff !important;
+  border: 1px solid #004085 !important;
+}
+
+.style-btn:hover {
+  background-color: #003366 !important;
+  border-color: #003366 !important;
+}
+
+.style-btn.active {
+  background-color: #004085 !important;
+  color: #fff !important;
+}
+
+/* Search buttons */
+.search-btn {
+  background-color: #004085 !important; /* Darker blue for better contrast */
+  color: #fff !important;
+  border: 1px solid #004085 !important;
+}
+
+.search-btn:hover {
+  background-color: #003366 !important;
+  border-color: #003366 !important;
+}
+
+/* Custom marker accessibility */
+.custom-marker {
+  cursor: pointer !important;
+  transition: transform 0.2s !important;
+}
+
+.custom-marker:hover {
+  transform: scale(1.1) !important;
+}
+
+.custom-marker:focus {
+  outline: 2px solid #007bff !important;
+  outline-offset: 2px !important;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .btn-primary {
+    background-color: #000 !important;
+    border-color: #000 !important;
+    color: #fff !important;
+  }
+  
+  .btn-secondary {
+    background-color: #333 !important;
+    border-color: #333 !important;
+    color: #fff !important;
+  }
+  
+  .text-primary {
+    color: #000 !important;
+  }
+  
+  .text-secondary {
+    color: #333 !important;
+  }
+  
+  a {
+    color: #000 !important;
+    text-decoration: underline !important;
+  }
+  
+  .form-control {
+    border-color: #000 !important;
+  }
+  
+  .form-control:focus {
+    border-color: #000 !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.25) !important;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .btn-primary {
+    background-color: #0d6efd !important;
+    border-color: #0d6efd !important;
+  }
+  
+  .btn-secondary {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+  }
+  
+  .form-control {
+    background-color: #212529 !important;
+    border-color: #495057 !important;
+    color: #fff !important;
+  }
+  
+  .form-control:focus {
+    background-color: #212529 !important;
+    border-color: #0d6efd !important;
+    color: #fff !important;
+  }
+  
+  .card {
+    background-color: #212529 !important;
+    border-color: #495057 !important;
+    color: #fff !important;
+  }
+  
+  .modal-content {
+    background-color: #212529 !important;
+    border-color: #495057 !important;
+    color: #fff !important;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .sr-only {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    clip: auto !important;
+    white-space: normal !important;
+  }
+  
+  .skip-link {
+    display: none !important;
+  }
+  
+  * {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  a,
+  a:visited {
+    text-decoration: underline !important;
+  }
+  
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+  
+  .btn {
+    border: 1px solid #000 !important;
+    background: transparent !important;
+  }
+}
+
+/* Focus trap styles */
+.focus-trap {
+  position: relative !important;
+}
+
+.focus-trap::before,
+.focus-trap::after {
+  content: '' !important;
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  opacity: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Loading states */
+.loading {
+  position: relative !important;
+  pointer-events: none !important;
+}
+
+.loading::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  width: 20px !important;
+  height: 20px !important;
+  margin: -10px 0 0 -10px !important;
+  border: 2px solid #f3f3f3 !important;
+  border-top: 2px solid #007bff !important;
+  border-radius: 50% !important;
+  animation: spin 1s linear infinite !important;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Error states */
+.has-error .form-control {
+  border-color: #dc3545 !important;
+}
+
+.has-error .form-label {
+  color: #dc3545 !important;
+}
+
+/* Success states */
+.has-success .form-control {
+  border-color: #28a745 !important;
+}
+
+.has-success .form-label {
+  color: #28a745 !important;
+}
+
+/* Responsive text sizing */
+@media (max-width: 768px) {
+  html {
+    font-size: 16px !important;
+  }
+  
+  .btn {
+    min-height: 44px !important; /* Minimum touch target size */
+    min-width: 44px !important;
+  }
+  
+  .form-control {
+    min-height: 44px !important;
+  }
+  
+  .nav-link {
+    min-height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+}
+
+/* Ensure sufficient spacing for touch targets */
+.btn,
+.nav-link,
+.form-control,
+input[type="checkbox"],
+input[type="radio"] {
+  min-height: 44px !important;
+  min-width: 44px !important;
+}
+
+/* Custom focus indicators for interactive elements */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid #007bff !important;
+  outline-offset: 2px !important;
+}
+
+/* Ensure text is readable */
+p, li, span, div {
+  line-height: 1.5 !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.3 !important;
+  margin-bottom: 0.5em !important;
+}
+
+/* Ensure proper heading hierarchy */
+h1 { font-size: 2rem !important; }
+h2 { font-size: 1.75rem !important; }
+h3 { font-size: 1.5rem !important; }
+h4 { font-size: 1.25rem !important; }
+h5 { font-size: 1.1rem !important; }
+h6 { font-size: 1rem !important; }

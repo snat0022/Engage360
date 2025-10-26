@@ -1,0 +1,45 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users collection - Allow authenticated users to read/write
+    match /users/{userId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Program registrations - Allow authenticated users to read/write
+    match /programRegistrations/{registrationId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Admin roles collection - Allow authenticated users to read/write
+    match /adminRoles/{adminRoleId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Programs collection - Allow authenticated users to read/write
+    match /programs/{programId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Admin activity log - Allow authenticated users to read/write
+    match /adminActivityLog/{logId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Bookings collection - Allow authenticated users to read/write their own bookings
+    match /bookings/{bookingId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Instructors collection - Allow authenticated users to read
+    match /instructors/{instructorId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null; // Allow write for admin management
+    }
+    
+    // Default: Deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -10,6 +10,14 @@ export default defineConfig({
       '@': resolve(__dirname, 'src')
     }
   },
+  optimizeDeps: {
+    include: ['mapbox-gl'],
+    exclude: ['@mapbox/mapbox-gl-directions', '@mapbox/mapbox-gl-geocoder']
+  },
+  define: {
+    global: 'globalThis',
+    '__dirname': '""'
+  },
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
@@ -19,7 +27,8 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ['vue', 'vue-router'],
-          firebase: ['firebase/app', 'firebase/auth']
+          firebase: ['firebase/app', 'firebase/auth'],
+          mapbox: ['mapbox-gl']
         }
       }
     }

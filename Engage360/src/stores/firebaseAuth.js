@@ -5,8 +5,12 @@ import {
   signInWithPopup,
   signOut,
   onAuthStateChanged,
+  updateProfile,
+  sendEmailVerification,
+  sendPasswordResetEmail,
 } from 'firebase/auth'
 import { auth, googleProvider } from '@/firebase/config'
+import { firestoreService } from '@/services/firestoreService'
 
 export const firebaseAuthStore = reactive({
   currentUser: null,
@@ -35,7 +39,19 @@ export const firebaseAuthStore = reactive({
     try {
       this.error = null
       const result = await createUserWithEmailAndPassword(auth, email, password)
-      await result.user.updateProfile({ displayName: name })
+      await updateProfile(result.user, { displayName: name })
+      
+      // Save user to Firestore
+      await firestoreService.createUser({
+        uid: result.user.uid,
+        email: result.user.email,
+        displayName: name,
+        emailVerified: result.user.emailVerified,
+        role: 'user',
+        status: 'active'
+      })
+      console.log('User saved to Firestore successfully')
+      
       return result.user
     } catch (error) {
       this.error = error.message
@@ -63,16 +79,55 @@ export const firebaseAuthStore = reactive({
     }
   },
 
+  async sendEmailVerification() {
+    try {
+      if (!this.currentUser) throw new Error('No user logged in')
+      await sendEmailVerification(this.currentUser)
+      return true
+    } catch (error) {
+      this.error = error.message
+      throw error
+    }
+  },
+
+  async sendPasswordReset(email) {
+    try {
+      await sendPasswordResetEmail(auth, email)
+      return true
+    } catch (error) {
+      this.error = error.message
+      throw error
+    }
+  },
+
   isLoggedIn() {
     return !!this.currentUser
   },
 
-  getUserRole() {
+  async getUserRole() {
     if (!this.currentUser) return null
-
-    // For demo purposes, assign admin role to specific emails
-    const adminEmails = ['admin@engage360.com', 'test@admin.com', 'shreyasnatraj97@gmail.com']
-    return adminEmails.includes(this.currentUser.email) ? 'admin' : 'user'
+    
+    // First check hardcoded admin emails (more reliable)
+    const adminEmails = [
+      'admin@engage360.com', 
+      'test@admin.com', 
+      'shreyasnatraj97@gmail.com'
+    ]
+    const isHardcodedAdmin = adminEmails.includes(this.currentUser.email)
+    
+    if (isHardcodedAdmin) {
+      return 'admin'
+    }
+    
+    // Then try Firestore check
+    try {
+      const isAdmin = await firestoreService.getAdminRole(this.currentUser.email)
+      console.log('Firestore admin check result:', isAdmin)
+      return isAdmin ? 'admin' : 'user'
+    } catch (error) {
+      console.error('Error getting user role from Firestore:', error)
+      return 'user'
+    }
   },
 
   // Fallback methods for compatibility

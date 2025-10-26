@@ -1,18 +1,20 @@
 import { initializeApp } from 'firebase/app'
 import { getAuth, GoogleAuthProvider } from 'firebase/auth'
+import { getFirestore } from 'firebase/firestore'
 
-// Firebase configuration - Replace with your actual Firebase project config
+// Firebase configuration for Week7-Shreyas project
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "demo-api-key",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "demo-project.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "demo-project",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "demo-project.appspot.com",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "123456789012",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:123456789012:web:demo-app-id"
+  apiKey: "AIzaSyBQN9plFPMHvJ4GaXvn_1WohxRxb7hTESk",
+  authDomain: "week7-shreyas.firebaseapp.com",
+  projectId: "week7-shreyas",
+  storageBucket: "week7-shreyas.firebasestorage.app",
+  messagingSenderId: "931399826882",
+  appId: "1:931399826882:web:5577837b300c47414d2a5b"
 }
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
 export const auth = getAuth(app)
+export const db = getFirestore(app)
 export const googleProvider = new GoogleAuthProvider()
 export default app

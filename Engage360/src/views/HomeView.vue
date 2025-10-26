@@ -17,12 +17,12 @@
         </p>
 
         <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
-          <RouterLink to="/form" class="btn btn-lg btn-light text-primary shadow-hero">
-            Join Our Community <span class="ms-2">→</span>
+          <RouterLink to="/programs" class="btn btn-lg btn-light text-primary shadow-hero">
+            View Programs <span class="ms-2">→</span>
           </RouterLink>
-          <a href="#why" class="btn btn-lg btn-outline-light">
-            Learn More
-          </a>
+          <RouterLink to="/form" class="btn btn-lg btn-outline-light">
+            Join Our Community
+          </RouterLink>
         </div>
       </div>
     </section>
@@ -112,8 +112,8 @@
               <p class="text-muted mb-4">
                 Registration takes just 5 minutes, and our team will contact you within 24 hours to discuss the best programs for your needs.
               </p>
-              <RouterLink to="/form" class="btn btn-primary w-100">
-                Register Now <span class="ms-2">→</span>
+              <RouterLink to="/programs" class="btn btn-primary w-100">
+                View Programs <span class="ms-2">→</span>
               </RouterLink>
             </div>
           </div>
@@ -129,8 +129,8 @@
           Take the first step towards better health, new friendships, and a stronger community.
         </p>
         <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
-          <RouterLink to="/form" class="btn btn-lg btn-light text-primary">Register Today</RouterLink>
-          <RouterLink to="/faq" class="btn btn-lg btn-outline-light">Learn More</RouterLink>
+          <RouterLink to="/programs" class="btn btn-lg btn-light text-primary">View Programs</RouterLink>
+          <RouterLink to="/form" class="btn btn-lg btn-outline-light">Register Today</RouterLink>
         </div>
       </div>
     </section>
