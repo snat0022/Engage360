@@ -1,6 +1,96 @@
 # Engage360 Deployment Guide
 
-## Cloudflare Pages Deployment
+## Firebase Hosting Deployment (Current Method)
+
+### ✅ Successfully Deployed
+- **Live URL**: https://week7-shreyas.web.app
+- **Project**: week7-shreyas
+- **Status**: ✅ Live and Operational
+
+### Important Note About Environment Variables in Firebase Hosting
+
+**Firebase Hosting does NOT support environment variables for client-side applications.** All environment variables must be set at **build time** using a `.env` file.
+
+### Configure SendGrid Email Service
+
+**Option 1: Build-time Configuration (Recommended for Firebase Hosting)**
+
+1. Create a `.env` file in the project root:
+   ```bash
+   # In the Engage360 directory
+   cd c:\Users\shrey\Engage360\Engage360
+   ```
+
+2. Create `.env` file with your SendGrid API key:
+   ```env
+   VITE_SENDGRID_API_KEY=SG.your_actual_sendgrid_api_key_here
+   ```
+
+3. Get your SendGrid API key:
+   - Go to https://app.sendgrid.com/
+   - Log in to your SendGrid account
+   - Go to Settings → API Keys
+   - Click "Create API Key"
+   - Choose "Restricted Access" and give it "Mail Send" permissions
+   - Copy the API key (it starts with `SG.`)
+
+4. Verify sender email in SendGrid:
+   - Go to Settings → Sender Authentication
+   - Click "Verify a Single Sender"
+   - Add `noreply@engage360.com` as the sender email
+   - Verify the email address through the confirmation email
+
+5. Build and deploy:
+   ```bash
+   # Build with the new API key
+   npm run build
+   
+   # Deploy to Firebase
+   firebase deploy --only hosting
+   ```
+
+**Option 2: Cloud Functions (Alternative Approach)**
+
+If you need runtime environment variables, use Firebase Cloud Functions:
+
+1. Set environment variables in Functions:
+   ```bash
+   firebase functions:config:set sendgrid.api_key="YOUR_API_KEY"
+   ```
+
+2. Deploy functions:
+   ```bash
+   firebase deploy --only functions
+   ```
+
+3. Call the function from your client app instead of direct SendGrid calls.
+
+### Security Best Practices
+
+⚠️ **IMPORTANT**: Never commit `.env` files to Git!
+
+1. Ensure `.env` is in `.gitignore`
+2. Add `.env` to `.gitignore` if not already present
+3. Never share your API keys publicly
+4. Use restricted API keys with minimal permissions
+5. Rotate API keys regularly
+
+### Current Deployment Status
+
+- ✅ Frontend hosted on Firebase Hosting
+- ✅ Firestore rules deployed
+- ✅ Database configured
+- ⚠️ SendGrid email service in demo mode (needs configuration)
+- ⚠️ Environment variables need to be configured for production
+
+### Deploy with SendGrid Configuration
+
+1. **Add SendGrid API key to `.env` file**
+2. **Build the application**: `npm run build`
+3. **Deploy to Firebase**: `firebase deploy --only hosting`
+4. **Test email functionality** on the live site
+
+## Cloudflare Pages Deployment (Alternative Option)
 
 ### Prerequisites
 1. Cloudflare account

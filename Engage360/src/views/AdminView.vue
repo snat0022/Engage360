@@ -2232,6 +2232,23 @@ onUnmounted(() => {
   font-size: 0.75em;
 }
 
+/* Ensure all table headers are visible */
+:deep(.table thead) {
+  display: table-header-group !important;
+}
+
+:deep(.table thead th) {
+  display: table-cell !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  color: #fff !important;
+  background-color: #212529 !important;
+  padding: 0.75rem 0.5rem;
+  font-weight: 600;
+  text-align: left;
+  border: 1px solid #454d55;
+}
+
 /* Calendar Styles */
 .calendar-container {
   background: white;
@@ -2245,6 +2262,22 @@ onUnmounted(() => {
 /* Table Scrolling Styles */
 .table-responsive {
   border-radius: 8px;
+}
+
+/* Ensure table headers are always visible */
+.table-responsive :deep(.table thead) {
+  display: table-header-group !important;
+}
+
+.table-responsive :deep(.table thead th) {
+  display: table-cell !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  color: #fff !important;
+  background-color: #212529 !important;
+  padding: 0.75rem 0.5rem;
+  font-weight: 600;
+  text-align: left;
 }
 
 .table-responsive::-webkit-scrollbar {
@@ -2272,6 +2305,8 @@ onUnmounted(() => {
   background-color: #f8f9fa;
   z-index: 10;
   border-bottom: 2px solid #dee2e6;
+  display: table-cell !important;
+  visibility: visible !important;
 }
 
 .scroll-to-top {

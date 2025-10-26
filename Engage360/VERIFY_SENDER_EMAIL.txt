@@ -1,0 +1,21 @@
+﻿=======================================
+âš¡ ACTION REQUIRED: Verify Sender Email
+=======================================
+
+Your SendGrid API key is configured and deployed!
+But you need to verify the sender email address.
+
+Steps:
+1. Go to: https://app.sendgrid.com/
+2. Click: Settings â†’ Sender Authentication
+3. Click: Verify a Single Sender
+4. Enter: noreply@engage360.com
+5. Fill in the form (Name: Engage360, etc.)
+6. Check your email and click the verification link
+
+Without this, SendGrid will reject emails!
+
+Current Status:
+âœ… API Key: Configured
+âœ… Application: Deployed
+âš ï¸  Sender Email: NOT VERIFIED (Required)

@@ -58,7 +58,9 @@ export const emailService = {
         attachments
       }
 
+      console.log('Attempting to send email via SendGrid:', { to, subject })
       const response = await sgMail.send(msg)
+      console.log('Email sent successfully:', response)
       
       return {
         success: true,
@@ -68,24 +70,30 @@ export const emailService = {
       }
     } catch (error) {
       console.error('Email sending failed:', error)
+      console.error('Error details:', {
+        message: error.message,
+        code: error.code,
+        response: error.response
+      })
       
       // Handle specific SendGrid errors
       if (error.response) {
         const { status, body } = error.response
+        console.error('SendGrid API error:', { status, body })
+        
         if (status === 401) {
           throw new Error('SendGrid API key is invalid. Please check your configuration.')
         } else if (status === 403) {
           throw new Error('SendGrid sender email not verified. Please verify noreply@engage360.com in SendGrid.')
         } else if (status === 400) {
-          throw new Error(`SendGrid validation error: ${body.errors?.[0]?.message || 'Invalid request'}`)
+          const errorMessage = body?.errors?.[0]?.message || 'Invalid request'
+          throw new Error(`SendGrid validation error: ${errorMessage}`)
+        } else {
+          throw new Error(`SendGrid error: ${status} - ${JSON.stringify(body)}`)
         }
       }
       
-      return { 
-        success: false, 
-        error: error.message,
-        demo: false
-      }
+      throw new Error(error.message || 'Failed to send email')
     }
   },
 
@@ -131,6 +139,84 @@ export const emailService = {
       text: message,
       html,
     })
+  },
+
+  async sendBulkEmail(campaign, recipients) {
+    try {
+      const results = {
+        success: [],
+        failed: [],
+        total: recipients.length
+      }
+
+      console.log(`Sending bulk email to ${recipients.length} recipients`)
+
+      // Send emails in batches to avoid rate limits
+      const batchSize = 10
+      for (let i = 0; i < recipients.length; i += batchSize) {
+        const batch = recipients.slice(i, i + batchSize)
+        
+        await Promise.allSettled(
+          batch.map(async (recipient) => {
+            try {
+              const result = await this.sendEmail({
+                to: recipient.email,
+                subject: campaign.subject,
+                html: campaign.content,
+                text: campaign.content.replace(/<[^>]*>/g, '') // Strip HTML for text version
+              })
+              
+              if (result.success) {
+                results.success.push(recipient.email)
+              } else {
+                results.failed.push({ email: recipient.email, error: result.error })
+              }
+            } catch (error) {
+              console.error(`Failed to send email to ${recipient.email}:`, error)
+              results.failed.push({ email: recipient.email, error: error.message })
+            }
+          })
+        )
+
+        // Small delay between batches to avoid rate limits
+        if (i + batchSize < recipients.length) {
+          await new Promise(resolve => setTimeout(resolve, 500))
+        }
+      }
+
+      console.log(`Bulk email completed: ${results.success.length} sent, ${results.failed.length} failed`)
+
+      return {
+        success: true,
+        sent: results.success.length,
+        failed: results.failed.length,
+        results
+      }
+    } catch (error) {
+      console.error('Bulk email error:', error)
+      throw error
+    }
+  },
+
+  async scheduleBulkEmail(campaign, recipients) {
+    console.log(`Scheduling bulk email for ${recipients.length} recipients at ${campaign.scheduledTime}`)
+    
+    // For now, just save the campaign and send it immediately
+    // In a production environment, you would use a task scheduler or queue system
+    return this.sendBulkEmail(campaign, recipients)
+  },
+
+  async resendCampaign(campaign) {
+    console.log(`Resending campaign: ${campaign.subject}`)
+    
+    // This is a placeholder - in production, you would retrieve the original recipients
+    // and resend to them
+    console.warn('Campaign resend functionality needs to be implemented with recipient retrieval')
+    
+    return {
+      success: false,
+      message: 'Campaign resend not yet implemented'
+    }
   },
 
   // Utility functions

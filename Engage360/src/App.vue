@@ -15,25 +15,36 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="main-container">
-    <!-- Skip Links -->
+  <!-- Skip Links Container -->
+  <div id="skip-links" role="region" aria-label="Skip navigation links">
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <a href="#navigation" class="skip-link">Skip to navigation</a>
-    <a href="#search" class="skip-link">Skip to search</a>
-    
+  </div>
+
+  <div class="main-container">
     <!-- Header with proper ARIA landmark -->
     <header id="banner" role="banner" aria-label="Site header">
       <Bheader />
     </header>
 
+    <!-- Navigation with proper ARIA landmark -->
+    <nav id="navigation" role="navigation" aria-label="Main navigation">
+      <!-- Navigation content will be here if needed -->
+    </nav>
+
     <!-- Main content area with proper ARIA landmark -->
-    <main id="main-content" role="main" aria-label="Main content">
+    <main id="main-content" role="main" aria-label="Main content" tabindex="-1">
       <!-- Route components render here -->
       <RouterView />
     </main>
     
     <!-- Registration Modal - Available on all pages -->
     <RegistrationModal />
+    
+    <!-- Footer with proper ARIA landmark -->
+    <footer role="contentinfo" aria-label="Site footer">
+      <!-- Footer content -->
+    </footer>
     
     <!-- Accessibility Announcements -->
     <div id="accessibility-announcer" aria-live="polite" aria-atomic="true" class="sr-only"></div>
