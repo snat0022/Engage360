@@ -4,9 +4,9 @@
       <!-- Header -->
       <div class="text-center mb-4 mb-md-5">
         <h1 class="fw-bold mb-2">Join Our Community</h1>
-        <p class="lead text-muted mx-auto" style="max-width: 40rem;">
-          Take the first step towards better health and stronger connections.
-          We'll match you with programs that fit your needs and goals.
+        <p class="lead text-muted mx-auto" style="max-width: 40rem">
+          Take the first step towards better health and stronger connections. We'll match you with
+          programs that fit your needs and goals.
         </p>
       </div>
 
@@ -26,7 +26,8 @@
         <div class="card-body p-4 p-md-5">
           <h2 class="h4 fw-bold mb-1">Registration Form</h2>
           <p class="text-muted mb-4">
-            Please fill out all required fields. This helps us provide you with the best possible experience.
+            Please fill out all required fields. This helps us provide you with the best possible
+            experience.
           </p>
 
           <form @submit.prevent="handleSubmit" novalidate class="space-y">
@@ -40,22 +41,42 @@
             <div class="row g-3">
               <div class="col-md-6">
                 <label class="form-label">First Name *</label>
-                <input class="form-control" v-model.trim="form.firstName" :class="invalid('firstName')" @input="clear('firstName')" />
+                <input
+                  class="form-control"
+                  v-model.trim="form.firstName"
+                  :class="invalid('firstName')"
+                  @input="clear('firstName')"
+                />
                 <div class="invalid-feedback" v-if="errors.firstName">{{ errors.firstName }}</div>
               </div>
               <div class="col-md-6">
                 <label class="form-label">Last Name *</label>
-                <input class="form-control" v-model.trim="form.lastName" :class="invalid('lastName')" @input="clear('lastName')" />
+                <input
+                  class="form-control"
+                  v-model.trim="form.lastName"
+                  :class="invalid('lastName')"
+                  @input="clear('lastName')"
+                />
                 <div class="invalid-feedback" v-if="errors.lastName">{{ errors.lastName }}</div>
               </div>
               <div class="col-md-6">
                 <label class="form-label">Email *</label>
-                <input class="form-control" v-model.trim="form.email" :class="invalid('email')" @input="clear('email')" />
+                <input
+                  class="form-control"
+                  v-model.trim="form.email"
+                  :class="invalid('email')"
+                  @input="clear('email')"
+                />
                 <div class="invalid-feedback" v-if="errors.email">{{ errors.email }}</div>
               </div>
               <div class="col-md-6">
                 <label class="form-label">Phone *</label>
-                <input class="form-control" v-model.trim="form.phone" :class="invalid('phone')" @input="clear('phone')" />
+                <input
+                  class="form-control"
+                  v-model.trim="form.phone"
+                  :class="invalid('phone')"
+                  @input="clear('phone')"
+                />
                 <div class="invalid-feedback" v-if="errors.phone">{{ errors.phone }}</div>
               </div>
             </div>
@@ -65,13 +86,27 @@
             <div class="row g-3">
               <div class="col-md-6">
                 <label class="form-label">Contact Name *</label>
-                <input class="form-control" v-model.trim="form.emergencyContact" :class="invalid('emergencyContact')" @input="clear('emergencyContact')" />
-                <div class="invalid-feedback" v-if="errors.emergencyContact">{{ errors.emergencyContact }}</div>
+                <input
+                  class="form-control"
+                  v-model.trim="form.emergencyContact"
+                  :class="invalid('emergencyContact')"
+                  @input="clear('emergencyContact')"
+                />
+                <div class="invalid-feedback" v-if="errors.emergencyContact">
+                  {{ errors.emergencyContact }}
+                </div>
               </div>
               <div class="col-md-6">
                 <label class="form-label">Contact Phone *</label>
-                <input class="form-control" v-model.trim="form.emergencyPhone" :class="invalid('emergencyPhone')" @input="clear('emergencyPhone')" />
-                <div class="invalid-feedback" v-if="errors.emergencyPhone">{{ errors.emergencyPhone }}</div>
+                <input
+                  class="form-control"
+                  v-model.trim="form.emergencyPhone"
+                  :class="invalid('emergencyPhone')"
+                  @input="clear('emergencyPhone')"
+                />
+                <div class="invalid-feedback" v-if="errors.emergencyPhone">
+                  {{ errors.emergencyPhone }}
+                </div>
               </div>
             </div>
 
@@ -80,23 +115,39 @@
             <div class="row g-2">
               <div class="col-6 col-md-4" v-for="sport in sportOptions" :key="sport">
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" :id="sport" :value="sport" :checked="form.interests.includes(sport)" @change="toggleInterest(sport, $event.target.checked)" />
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    :id="sport"
+                    :value="sport"
+                    :checked="form.interests.includes(sport)"
+                    @change="toggleInterest(sport, $event.target.checked)"
+                  />
                   <label class="form-check-label" :for="sport">{{ sport }}</label>
                 </div>
               </div>
             </div>
-            <div class="invalid-feedback d-block" v-if="errors.interests">{{ errors.interests }}</div>
+            <div class="invalid-feedback d-block" v-if="errors.interests">
+              {{ errors.interests }}
+            </div>
 
             <!-- Fitness -->
             <h3 class="section-title mt-4"><span>✓</span> Fitness Level *</h3>
-            <select class="form-select" v-model="form.fitnessLevel" :class="invalid('fitnessLevel')" @change="clear('fitnessLevel')">
+            <select
+              class="form-select"
+              v-model="form.fitnessLevel"
+              :class="invalid('fitnessLevel')"
+              @change="clear('fitnessLevel')"
+            >
               <option disabled value="">Select your fitness level</option>
               <option>Beginner</option>
               <option>Moderate</option>
               <option>Active</option>
               <option>Experienced</option>
             </select>
-            <div class="invalid-feedback d-block" v-if="errors.fitnessLevel">{{ errors.fitnessLevel }}</div>
+            <div class="invalid-feedback d-block" v-if="errors.fitnessLevel">
+              {{ errors.fitnessLevel }}
+            </div>
 
             <!-- Optional Info -->
             <h3 class="section-title mt-4"><span>✓</span> Health Info</h3>
@@ -107,8 +158,16 @@
 
             <!-- Consent -->
             <div class="form-check mt-4">
-              <input class="form-check-input" type="checkbox" id="consent" v-model="form.consent" @change="clear('consent')" />
-              <label class="form-check-label" for="consent">I agree to terms and privacy policy *</label>
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="consent"
+                v-model="form.consent"
+                @change="clear('consent')"
+              />
+              <label class="form-check-label" for="consent"
+                >I agree to terms and privacy policy *</label
+              >
               <div class="invalid-feedback d-block" v-if="errors.consent">{{ errors.consent }}</div>
             </div>
 
@@ -140,21 +199,48 @@ onMounted(() => {
 })
 
 const infoCards = [
-  { icon: '👥', title: 'Personalized Matching', desc: 'We match you with the right programs and community members.' },
-  { icon: '❤️', title: 'Health & Safety', desc: 'Health info helps us create safe, beneficial activities.' },
-  { icon: '🛡️', title: 'Your Privacy', desc: 'Your data is confidential, used only to improve your experience.' }
+  {
+    icon: '👥',
+    title: 'Personalized Matching',
+    desc: 'We match you with the right programs and community members.',
+  },
+  {
+    icon: '❤️',
+    title: 'Health & Safety',
+    desc: 'Health info helps us create safe, beneficial activities.',
+  },
+  {
+    icon: '🛡️',
+    title: 'Your Privacy',
+    desc: 'Your data is confidential, used only to improve your experience.',
+  },
 ]
 
 const sportOptions = [
-  'Basketball', 'Soccer', 'Swimming', 'Tennis', 'Volleyball',
-  'Fitness Classes', 'Walking Groups', 'Yoga', 'Dancing', 'Cycling'
+  'Basketball',
+  'Soccer',
+  'Swimming',
+  'Tennis',
+  'Volleyball',
+  'Fitness Classes',
+  'Walking Groups',
+  'Yoga',
+  'Dancing',
+  'Cycling',
 ]
 
 const form = reactive({
-  firstName: '', lastName: '', email: '', phone: '',
-  emergencyContact: '', emergencyPhone: '',
-  interests: [], fitnessLevel: '',
-  healthConditions: '', motivation: '', consent: false
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+  emergencyContact: '',
+  emergencyPhone: '',
+  interests: [],
+  fitnessLevel: '',
+  healthConditions: '',
+  motivation: '',
+  consent: false,
 })
 
 const errors = reactive({})
@@ -173,12 +259,12 @@ function invalid(field) {
 
 function toggleInterest(sport, checked) {
   if (checked) form.interests.push(sport)
-  else form.interests = form.interests.filter(i => i !== sport)
+  else form.interests = form.interests.filter((i) => i !== sport)
   clear('interests')
 }
 
 function validate() {
-  Object.keys(errors).forEach(k => delete errors[k])
+  Object.keys(errors).forEach((k) => delete errors[k])
   formAlert.value = ''
   submitOk.value = false
 
@@ -193,7 +279,8 @@ function validate() {
 
   if (!form.emergencyContact) errors.emergencyContact = 'Required'
   if (!form.emergencyPhone) errors.emergencyPhone = 'Required'
-  else if (!/^\+?\d{10,15}$/.test(form.emergencyPhone)) errors.emergencyPhone = 'Invalid phone number'
+  else if (!/^\+?\d{10,15}$/.test(form.emergencyPhone))
+    errors.emergencyPhone = 'Invalid phone number'
 
   if (form.interests.length === 0) errors.interests = 'Select at least one'
   if (!form.fitnessLevel) errors.fitnessLevel = 'Required'
@@ -213,7 +300,7 @@ async function handleSubmit() {
   submitting.value = true
 
   try {
-    await new Promise(r => setTimeout(r, 1200))
+    await new Promise((r) => setTimeout(r, 1200))
 
     const cleanedForm = {
       ...form,
@@ -225,7 +312,7 @@ async function handleSubmit() {
       emergencyPhone: sanitize(form.emergencyPhone),
       healthConditions: sanitize(form.healthConditions),
       motivation: sanitize(form.motivation),
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     }
 
     // ✅ Corrected method name
@@ -238,10 +325,17 @@ async function handleSubmit() {
     submitOk.value = true
 
     Object.assign(form, {
-      firstName: '', lastName: '', email: '', phone: '',
-      emergencyContact: '', emergencyPhone: '',
-      interests: [], fitnessLevel: '', healthConditions: '',
-      motivation: '', consent: false
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      emergencyContact: '',
+      emergencyPhone: '',
+      interests: [],
+      fitnessLevel: '',
+      healthConditions: '',
+      motivation: '',
+      consent: false,
     })
   } catch (err) {
     console.error('Submission failed:', err)
@@ -253,15 +347,42 @@ async function handleSubmit() {
 }
 </script>
 
-
 <style scoped>
-.bg-muted { background: #f6f9fc; }
-.gradient-card { background: linear-gradient(180deg, #fff, #f7fbff); border-radius: 1rem; }
-.shadow-card { box-shadow: 0 14px 34px rgba(2,6,23,.08); }
-.min-h { min-height: 5rem; }
-.section-title { font-size: 1rem; font-weight: 700; margin: 1.25rem 0 .75rem; display: flex; align-items: center; gap: .5rem; }
-.section-title span { color: #0d6efd; }
-.space-y > * + * { margin-top: 1rem; }
-@media (max-width: 575.98px) { .registration-page .card-body { padding: 1rem; } }
-@media (min-width: 1400px) { .registration-page .container { max-width: 1100px; } }
+.bg-muted {
+  background: #f6f9fc;
+}
+.gradient-card {
+  background: linear-gradient(180deg, #fff, #f7fbff);
+  border-radius: 1rem;
+}
+.shadow-card {
+  box-shadow: 0 14px 34px rgba(2, 6, 23, 0.08);
+}
+.min-h {
+  min-height: 5rem;
+}
+.section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 1.25rem 0 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.section-title span {
+  color: #0d6efd;
+}
+.space-y > * + * {
+  margin-top: 1rem;
+}
+@media (max-width: 575.98px) {
+  .registration-page .card-body {
+    padding: 1rem;
+  }
+}
+@media (min-width: 1400px) {
+  .registration-page .container {
+    max-width: 1100px;
+  }
+}
 </style>

@@ -16,20 +16,20 @@
             <RouterLink class="nav-link" to="/faq">FAQ</RouterLink>
           </li>
           <li class="nav-item">
-            <RouterLink class="nav-link" to="/about">About</RouterLink>
+            <RouterLink class="nav-link" to="/ratings">Ratings</RouterLink>
           </li>
-          <li v-if="authStore.getRole() === 'admin'" class="nav-item">
+          <li v-if="firebaseAuthStore.getUserRole() === 'admin'" class="nav-item">
             <RouterLink class="nav-link" to="/admin">Admin</RouterLink>
           </li>
         </ul>
 
         <div class="d-flex">
-          <span class="me-3" v-if="authStore.isLoggedIn()">
-            Welcome, {{ authStore.currentUser.name }}!
+          <span class="me-3" v-if="firebaseAuthStore.isLoggedIn()">
+            Welcome, {{ firebaseAuthStore.currentUser.displayName || firebaseAuthStore.currentUser.email }}!
           </span>
 
           <RouterLink
-            v-if="!authStore.isLoggedIn()"
+            v-if="!firebaseAuthStore.isLoggedIn()"
             to="/login"
             class="btn btn-outline-primary me-2"
           >
@@ -37,7 +37,7 @@
           </RouterLink>
 
           <RouterLink
-            v-if="!authStore.isLoggedIn()"
+            v-if="!firebaseAuthStore.isLoggedIn()"
             to="/register"
             class="btn btn-primary"
           >
@@ -45,7 +45,7 @@
           </RouterLink>
 
           <button
-            v-if="authStore.isLoggedIn()"
+            v-if="firebaseAuthStore.isLoggedIn()"
             @click="logout"
             class="btn btn-danger"
           >
@@ -58,13 +58,13 @@
 </template>
 
 <script setup>
-import { authStore } from '@/stores/auth'
+import { firebaseAuthStore } from '@/stores/firebaseAuth'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-function logout() {
-  authStore.logout()
+async function logout() {
+  await firebaseAuthStore.logout()
   router.push('/')
 }
 </script>
